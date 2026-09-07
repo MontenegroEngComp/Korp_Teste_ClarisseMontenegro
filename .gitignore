@@ -1,0 +1,23 @@
+# Angular
+node_modules/
+dist/
+.angular/
+coverage/
+
+# C# e .NET
+bin/
+obj/
+.vs/
+*.user
+*.suo
+
+# VS Code
+.vscode/
+
+# Configurações privadas
+.env
+appsettings.Development.json
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
