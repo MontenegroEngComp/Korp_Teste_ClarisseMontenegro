@@ -1,11 +1,8 @@
-import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import {
-  CreateInvoiceRequest,
-  Invoice,
-} from '../models/invoice';
+import { Invoice } from '../models/invoice';
 
 @Injectable({
   providedIn: 'root',
@@ -22,15 +19,6 @@ export class Billing {
   getById(id: string): Observable<Invoice> {
     return this.http.get<Invoice>(
       `${this.apiUrl}/${id}`,
-    );
-  }
-
-  create(
-    request: CreateInvoiceRequest,
-  ): Observable<Invoice> {
-    return this.http.post<Invoice>(
-      this.apiUrl,
-      request,
     );
   }
 
