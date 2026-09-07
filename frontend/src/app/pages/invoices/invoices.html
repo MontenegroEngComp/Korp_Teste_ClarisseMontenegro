@@ -1,1 +1,132 @@
-<p>invoices works!</p>
+<section class="page">
+  <header class="page-header">
+    <div>
+      <span class="eyebrow">Faturamento</span>
+      <h1>Notas fiscais</h1>
+      <p>
+        Consulte as notas abertas e fechadas.
+      </p>
+    </div>
+
+    <div class="header-actions">
+      <button
+        class="secondary-button"
+        type="button"
+        [disabled]="isLoading()"
+        (click)="loadInvoices()"
+      >
+        Atualizar
+      </button>
+
+      <a
+        class="primary-button"
+        routerLink="/invoices/new"
+      >
+        Abrir nova nota
+      </a>
+    </div>
+  </header>
+
+  <div class="stats-grid">
+    <article class="stat-card">
+      <span>Total de notas</span>
+      <strong>{{ invoices().length }}</strong>
+    </article>
+
+    <article class="stat-card">
+      <span>Notas abertas</span>
+      <strong>{{ openInvoices() }}</strong>
+    </article>
+
+    <article class="stat-card">
+      <span>Notas fechadas</span>
+      <strong>{{ closedInvoices() }}</strong>
+    </article>
+
+    <article class="stat-card">
+      <span>Valor total</span>
+      <strong>
+        {{ totalValue() | currency: 'BRL' }}
+      </strong>
+    </article>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  <article class="content-card">
+    <div class="card-header">
+      <div>
+        <span class="eyebrow">Histórico</span>
+        <h2>Notas cadastradas</h2>
+      </div>
+
+      <span class="count">
+        {{ invoices().length }}
+      </span>
+    </div>
+
+    @if (isLoading()) {
+      <div class="state-message">
+        Carregando notas fiscais...
+      </div>
+    } @else if (invoices().length === 0) {
+      <div class="state-message">
+        Nenhuma nota fiscal cadastrada.
+      </div>
+    } @else {
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Número</th>
+              <th>Emissão</th>
+              <th>Itens</th>
+              <th>Status</th>
+              <th>Valor</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (invoice of invoices(); track invoice.id) {
+              <tr>
+                <td class="invoice-number">
+                  #{{ invoice.number }}
+                </td>
+
+                <td>
+                  {{ invoice.createdAt | date: 'dd/MM/yyyy HH:mm' }}
+                </td>
+
+                <td>
+                  {{ invoice.items.length }}
+                </td>
+
+                <td>
+                  <span
+                    class="status"
+                    [class.status-open]="invoice.status === 'Open'"
+                    [class.status-closed]="invoice.status === 'Closed'"
+                  >
+                    {{
+                      invoice.status === 'Open'
+                        ? 'Aberta'
+                        : 'Fechada'
+                    }}
+                  </span>
+                </td>
+
+                <td class="invoice-total">
+                  {{ invoice.total | currency: 'BRL' }}
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </article>
+</section>
