@@ -1,0 +1,39 @@
+<div class="app-shell">
+  <aside class="sidebar">
+    <a class="brand" routerLink="/products">
+      <span class="brand-mark">K</span>
+
+      <span>
+        <strong>Korp</strong>
+        <small>Notas fiscais</small>
+      </span>
+    </a>
+
+    <nav>
+      <a
+        routerLink="/products"
+        routerLinkActive="active"
+      >
+        Produtos
+      </a>
+
+      <a
+        routerLink="/invoices"
+        routerLinkActive="active"
+      >
+        Notas fiscais
+      </a>
+
+      <a
+        routerLink="/invoices/new"
+        routerLinkActive="active"
+      >
+        Abrir nota
+      </a>
+    </nav>
+  </aside>
+
+  <main class="content">
+    <router-outlet />
+  </main>
+</div>
