@@ -1,0 +1,38 @@
+services:
+  stock-db:
+    image: postgres:17-alpine
+    container_name: korp-stock-db
+    environment:
+      POSTGRES_DB: korp_stock
+      POSTGRES_USER: korp_user
+      POSTGRES_PASSWORD: korp_dev_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - stock-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U korp_user -d korp_stock"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  billing-db:
+    image: postgres:17-alpine
+    container_name: korp-billing-db
+    environment:
+      POSTGRES_DB: korp_billing
+      POSTGRES_USER: korp_user
+      POSTGRES_PASSWORD: korp_dev_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - billing-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U korp_user -d korp_billing"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  stock-data:
+  billing-data:
