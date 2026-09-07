@@ -1,5 +1,5 @@
-import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import {
@@ -17,12 +17,6 @@ export class Stock {
 
   getAll(): Observable<Product[]> {
     return this.http.get<Product[]>(this.apiUrl);
-  }
-
-  getById(id: string): Observable<Product> {
-    return this.http.get<Product>(
-      `${this.apiUrl}/${id}`,
-    );
   }
 
   create(
