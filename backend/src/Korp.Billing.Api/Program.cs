@@ -24,6 +24,19 @@ builder.Services.AddDbContext<BillingDbContext>(options =>
     )
 );
 
+builder.Services.AddProblemDetails();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Frontend", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddHttpClient<StockApiClient>(client =>
 {
     var stockApiUrl =
@@ -42,7 +55,9 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+app.UseExceptionHandler();
 app.UseHttpsRedirection();
+app.UseCors("Frontend");
 app.UseAuthorization();
 app.MapControllers();
 

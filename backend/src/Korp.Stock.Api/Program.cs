@@ -6,6 +6,19 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
+builder.Services.AddProblemDetails();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Frontend", policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 var connectionString =
     builder.Configuration.GetConnectionString("StockDatabase")
     ?? throw new InvalidOperationException(
@@ -23,10 +36,9 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+app.UseExceptionHandler();
 app.UseHttpsRedirection();
-
+app.UseCors("Frontend");
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();
