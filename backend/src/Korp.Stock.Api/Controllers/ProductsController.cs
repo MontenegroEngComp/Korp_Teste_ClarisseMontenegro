@@ -96,4 +96,63 @@ public sealed class ProductsController : ControllerBase
             product
         );
     }
+
+    [HttpPost("{id:guid}/stock/decrease")]
+    public async Task<ActionResult<Product>> DecreaseStock(
+        Guid id,
+        DecreaseStockRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        var updatedAt = DateTime.UtcNow;
+
+        var affectedRows = await _context.Products
+            .Where(product =>
+                product.Id == id &&
+                product.StockQuantity >= request.Quantity
+            )
+            .ExecuteUpdateAsync(
+                setters => setters
+                    .SetProperty(
+                        product => product.StockQuantity,
+                        product => product.StockQuantity - request.Quantity
+                    )
+                    .SetProperty(
+                        product => product.UpdatedAt,
+                        updatedAt
+                    ),
+                cancellationToken
+            );
+
+        if (affectedRows == 0)
+        {
+            var productExists = await _context.Products
+                .AnyAsync(
+                    product => product.Id == id,
+                    cancellationToken
+                );
+
+            if (!productExists)
+            {
+                return NotFound(new
+                {
+                    message = "Produto não encontrado."
+                });
+            }
+
+            return Conflict(new
+            {
+                message = "Estoque insuficiente para realizar a operação."
+            });
+        }
+
+        var updatedProduct = await _context.Products
+            .AsNoTracking()
+            .SingleAsync(
+                product => product.Id == id,
+                cancellationToken
+            );
+
+        return Ok(updatedProduct);
+    }
 }

@@ -1,4 +1,5 @@
 @StockApiUrl = http://localhost:5001
+@ProductId = f070066a-330a-45bd-9ee2-29c2c7d50d58
 
 ### Cadastrar produto
 
@@ -16,3 +17,30 @@ Content-Type: application/json
 
 GET {{StockApiUrl}}/api/products
 Accept: application/json
+
+### Diminuir estoque
+
+POST {{StockApiUrl}}/api/products/{{ProductId}}/stock/decrease
+Content-Type: application/json
+
+{
+  "quantity": 3
+}
+
+### Tentar diminuir além do saldo disponível
+
+POST {{StockApiUrl}}/api/products/{{ProductId}}/stock/decrease
+Content-Type: application/json
+
+{
+  "quantity": 100
+}
+
+### Tentar diminuir uma quantidade inválida
+
+POST {{StockApiUrl}}/api/products/{{ProductId}}/stock/decrease
+Content-Type: application/json
+
+{
+  "quantity": 0
+}
