@@ -1,6 +1,18 @@
-@Korp.Stock.Api_HostAddress = http://localhost:5057
+@StockApiUrl = http://localhost:5001
 
-GET {{Korp.Stock.Api_HostAddress}}/weatherforecast/
+### Cadastrar produto
+
+POST {{StockApiUrl}}/api/products
+Content-Type: application/json
+
+{
+  "code": "PRD-001",
+  "description": "Teclado mecânico K87",
+  "stockQuantity": 24,
+  "unitPrice": 289.90
+}
+
+### Listar produtos
+
+GET {{StockApiUrl}}/api/products
 Accept: application/json
-
-###
