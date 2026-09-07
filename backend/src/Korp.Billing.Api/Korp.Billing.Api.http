@@ -1,6 +1,39 @@
-@Korp.Billing.Api_HostAddress = http://localhost:5275
+@BillingApiUrl = http://localhost:5002
+@ProductId = f070066a-330a-45bd-9ee2-29c2c7d50d58
 
-GET {{Korp.Billing.Api_HostAddress}}/weatherforecast/
+### Abrir nota fiscal
+
+POST {{BillingApiUrl}}/api/invoices
+Content-Type: application/json
+
+{
+  "items": [
+    {
+      "productId": "{{ProductId}}",
+      "quantity": 2
+    }
+  ]
+}
+
+### Listar notas fiscais
+
+GET {{BillingApiUrl}}/api/invoices
 Accept: application/json
 
-###
+### Tentar abrir nota com produto repetido
+
+POST {{BillingApiUrl}}/api/invoices
+Content-Type: application/json
+
+{
+  "items": [
+    {
+      "productId": "{{ProductId}}",
+      "quantity": 1
+    },
+    {
+      "productId": "{{ProductId}}",
+      "quantity": 2
+    }
+  ]
+}
