@@ -27,4 +27,34 @@ public sealed class StockApiClient(HttpClient httpClient)
                 cancellationToken
             );
     }
+        public async Task<DecreaseStockResult> DecreaseStockBatchAsync(
+        IReadOnlyCollection<DecreaseStockItem> items,
+        CancellationToken cancellationToken
+        )
+    {
+        using var response = await httpClient.PostAsJsonAsync(
+            "api/stock/decrease-batch",
+            new
+            {
+                items
+            },
+            cancellationToken
+        );
+
+        return response.StatusCode switch
+        {
+            HttpStatusCode.NoContent =>
+                DecreaseStockResult.Success,
+
+            HttpStatusCode.NotFound =>
+                DecreaseStockResult.ProductNotFound,
+
+            HttpStatusCode.Conflict =>
+                DecreaseStockResult.InsufficientStock,
+
+            _ => throw new HttpRequestException(
+                $"Falha ao diminuir o estoque. Status: {(int)response.StatusCode}."
+            )
+        };
+    }
 }

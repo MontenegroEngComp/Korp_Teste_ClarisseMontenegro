@@ -125,4 +125,89 @@ public sealed class InvoicesController(
             invoice
         );
     }
+    [HttpPost("{id:guid}/close")]
+public async Task<ActionResult<Invoice>> Close(
+    Guid id,
+    CancellationToken cancellationToken
+)
+{
+    var invoice = await context.Invoices
+        .Include(currentInvoice => currentInvoice.Items)
+        .FirstOrDefaultAsync(
+            currentInvoice => currentInvoice.Id == id,
+            cancellationToken
+        );
+
+    if (invoice is null)
+    {
+        return NotFound(new
+        {
+            message = "Nota fiscal não encontrada."
+        });
+    }
+
+    if (invoice.Status == InvoiceStatus.Closed)
+    {
+        return Conflict(new
+        {
+            message = "A nota fiscal já está fechada."
+        });
+    }
+
+    var stockItems = invoice.Items
+        .Select(item => new DecreaseStockItem(
+            item.ProductId,
+            item.Quantity
+        ))
+        .ToList();
+
+    DecreaseStockResult stockResult;
+
+    try
+    {
+        stockResult = await stockApiClient
+            .DecreaseStockBatchAsync(
+                stockItems,
+                cancellationToken
+            );
+    }
+    catch (HttpRequestException)
+    {
+        return StatusCode(
+            StatusCodes.Status503ServiceUnavailable,
+            new
+            {
+                message =
+                    "Não foi possível acessar o serviço de estoque. " +
+                    "A nota permanece aberta e pode ser processada novamente."
+            }
+        );
+    }
+
+    if (stockResult == DecreaseStockResult.ProductNotFound)
+    {
+        return Conflict(new
+        {
+            message =
+                "Um dos produtos da nota não existe mais no estoque."
+        });
+    }
+
+    if (stockResult == DecreaseStockResult.InsufficientStock)
+    {
+        return Conflict(new
+        {
+            message =
+                "Um dos produtos não possui estoque suficiente. " +
+                "Nenhuma baixa foi realizada."
+        });
+    }
+
+    invoice.Status = InvoiceStatus.Closed;
+    invoice.ClosedAt = DateTime.UtcNow;
+
+    await context.SaveChangesAsync(cancellationToken);
+
+    return Ok(invoice);
+    }
 }
