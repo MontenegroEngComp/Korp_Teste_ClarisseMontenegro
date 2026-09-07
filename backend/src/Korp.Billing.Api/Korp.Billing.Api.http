@@ -1,5 +1,6 @@
 @BillingApiUrl = http://localhost:5002
 @ProductId = f070066a-330a-45bd-9ee2-29c2c7d50d58
+@InvoiceId = 30b96095-4c26-472c-bfcf-859c7af7afd3
 
 ### Abrir nota fiscal
 
@@ -37,3 +38,8 @@ Content-Type: application/json
     }
   ]
 }
+
+### Fechar nota fiscal
+
+POST {{BillingApiUrl}}/api/invoices/{{InvoiceId}}/close
+Accept: application/json
