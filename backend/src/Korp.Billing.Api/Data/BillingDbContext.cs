@@ -35,6 +35,16 @@ public sealed class BillingDbContext(
             builder.Property(invoice => invoice.CreatedAt)
                 .IsRequired();
 
+            builder.Property(invoice => invoice.IssuedByName)
+                .HasMaxLength(150);
+
+            builder.HasOne<Employee>()
+                .WithMany()
+                .HasForeignKey(invoice => invoice.IssuedByEmployeeId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasIndex(invoice => invoice.IssuedByEmployeeId);
+
             builder.HasMany(invoice => invoice.Items)
                 .WithOne()
                 .HasForeignKey(item => item.InvoiceId)
@@ -100,7 +110,11 @@ public sealed class BillingDbContext(
                 .HasMaxLength(30)
                 .IsRequired();
 
-            builder.Property(employee => employee.IsActive)
+           builder.Property(employee => employee.IsActive)
+                .IsRequired();
+
+            builder.Property(employee => employee.PasswordHash)
+                .HasMaxLength(500)
                 .IsRequired();
 
             builder.Property(employee => employee.CreatedAt)

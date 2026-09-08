@@ -16,6 +16,17 @@
     </a>
   </header>
 
+  @if (currentEmployee(); as employee) {
+    <div class="issuer-card">
+      <div class="issuer-identity">
+        <span>Emitida por</span>
+        <strong>{{ employee.name }}</strong>
+      </div>
+
+      <small>{{ employee.email }}</small>
+    </div>
+  }
+  
   @if (errorMessage()) {
     <div class="alert alert-error">
       {{ errorMessage() }}

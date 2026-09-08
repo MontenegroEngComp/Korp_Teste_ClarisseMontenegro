@@ -291,3 +291,54 @@ tbody tr:last-child td {
     grid-template-columns: 1fr;
   }
 }
+
+.issuer-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid #dce4e8;
+  border-radius: 0.75rem;
+  background: #f8fafb;
+
+  .issuer-identity {
+    display: flex;
+    align-items: baseline;
+    gap: 0.35rem;
+  }
+
+  span {
+    color: #68777d;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+
+  strong {
+    color: #17313b;
+    line-height: 1.2;
+  }
+
+  small {
+    color: #68777d;
+    text-align: right;
+  }
+}
+
+@media (max-width: 640px) {
+  .issuer-card {
+    align-items: flex-start;
+    flex-direction: column;
+
+    .issuer-identity {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    small {
+      text-align: left;
+    }
+  }
+}

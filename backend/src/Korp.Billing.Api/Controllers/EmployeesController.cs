@@ -3,13 +3,19 @@ using Korp.Billing.Api.Data;
 using Korp.Billing.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Korp.Billing.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Korp.Billing.Api.Controllers;
 
 [ApiController]
+[Authorize(Roles = nameof(EmployeeRole.Administrator))]
+[Route("api/employees")]
+
 [Route("api/employees")]
 public sealed class EmployeesController(
-    BillingDbContext context
+    BillingDbContext context,
+    PasswordService passwordService
 ) : ControllerBase
 {
     [HttpGet]
@@ -101,7 +107,8 @@ public sealed class EmployeesController(
             Cpf = cpf,
             Email = email,
             Phone = request.Phone.Trim(),
-            Role = request.Role
+            Role = request.Role,
+            PasswordHash = passwordService.Hash(request.Password)
         };
 
         context.Employees.Add(employee);
@@ -246,5 +253,36 @@ public sealed class EmployeesController(
         await context.SaveChangesAsync(cancellationToken);
 
         return Ok(employee);
+    }
+        [HttpPatch("{id:guid}/password")]
+    public async Task<IActionResult> UpdatePassword(
+        Guid id,
+        UpdateEmployeePasswordRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        var employee = await context.Employees
+            .FirstOrDefaultAsync(
+                currentEmployee => currentEmployee.Id == id,
+                cancellationToken
+            );
+
+        if (employee is null)
+        {
+            return NotFound(new
+            {
+                message = "Funcionário não encontrado."
+            });
+        }
+
+        employee.PasswordHash = passwordService.Hash(
+            request.Password
+        );
+
+        employee.UpdatedAt = DateTime.UtcNow;
+
+        await context.SaveChangesAsync(cancellationToken);
+
+        return NoContent();
     }
 }

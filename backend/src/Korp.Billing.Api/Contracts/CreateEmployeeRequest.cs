@@ -36,9 +36,17 @@ public sealed class CreateEmployeeRequest
     )]
     public string Phone { get; set; } = string.Empty;
 
-    [EnumDataType(
+        [EnumDataType(
         typeof(EmployeeRole),
-        ErrorMessage = "Informe um perfil válido."
-    )]
-    public EmployeeRole Role { get; set; }
+            ErrorMessage = "Informe um perfil válido."
+        )]
+        public EmployeeRole Role { get; set; }
+
+        [Required(ErrorMessage = "A senha é obrigatória.")]
+        [StringLength(
+            100,
+            MinimumLength = 8,
+            ErrorMessage = "A senha deve possuir entre 8 e 100 caracteres."
+        )]
+        public string Password { get; set; } = string.Empty;
 }

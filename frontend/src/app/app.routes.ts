@@ -1,15 +1,22 @@
 import { Routes } from '@angular/router';
 
+import { authGuard } from './core/guards/auth.guard';
 import { Shell } from './layout/shell/shell';
 import { Dashboard } from './pages/dashboard/dashboard';
 import { InvoiceCreate } from './pages/invoice-create/invoice-create';
 import { Invoices } from './pages/invoices/invoices';
+import { Login } from './pages/login/login';
 import { Products } from './pages/products/products';
 
 export const routes: Routes = [
   {
+    path: 'login',
+    component: Login,
+  },
+  {
     path: '',
     component: Shell,
+    canActivate: [authGuard],
     children: [
       {
         path: '',
@@ -37,5 +44,5 @@ export const routes: Routes = [
   {
     path: '**',
     redirectTo: 'dashboard',
-   },
+  },
 ];
