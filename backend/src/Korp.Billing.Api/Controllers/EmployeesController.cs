@@ -12,7 +12,6 @@ namespace Korp.Billing.Api.Controllers;
 [Authorize(Roles = nameof(EmployeeRole.Administrator))]
 [Route("api/employees")]
 
-[Route("api/employees")]
 public sealed class EmployeesController(
     BillingDbContext context,
     PasswordService passwordService
