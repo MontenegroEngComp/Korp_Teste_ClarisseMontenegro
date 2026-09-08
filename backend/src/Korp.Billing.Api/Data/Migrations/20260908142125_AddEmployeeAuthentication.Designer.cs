@@ -3,6 +3,7 @@ using System;
 using Korp.Billing.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Korp.Billing.Api.Data.Migrations
 {
     [DbContext(typeof(BillingDbContext))]
-    partial class BillingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260908142125_AddEmployeeAuthentication")]
+    partial class AddEmployeeAuthentication
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -90,13 +93,6 @@ namespace Korp.Billing.Api.Data.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid?>("IssuedByEmployeeId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("IssuedByName")
-                        .HasMaxLength(150)
-                        .HasColumnType("character varying(150)");
-
                     b.Property<long>("Number")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
@@ -109,8 +105,6 @@ namespace Korp.Billing.Api.Data.Migrations
                         .HasColumnType("character varying(20)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("IssuedByEmployeeId");
 
                     b.HasIndex("Number")
                         .IsUnique();
@@ -154,14 +148,6 @@ namespace Korp.Billing.Api.Data.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("invoice_items", (string)null);
-                });
-
-            modelBuilder.Entity("Korp.Billing.Api.Models.Invoice", b =>
-                {
-                    b.HasOne("Korp.Billing.Api.Models.Employee", null)
-                        .WithMany()
-                        .HasForeignKey("IssuedByEmployeeId")
-                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("Korp.Billing.Api.Models.InvoiceItem", b =>

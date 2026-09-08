@@ -4,10 +4,13 @@ using Korp.Billing.Api.Data;
 using Korp.Billing.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Korp.Billing.Api.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/invoices")]
 public sealed class InvoicesController(
     BillingDbContext context,
@@ -59,20 +62,55 @@ public sealed class InvoicesController(
         CancellationToken cancellationToken
     )
     {
-        var hasDuplicatedProducts = request.Items
-            .GroupBy(item => item.ProductId)
-            .Any(group => group.Count() > 1);
+        
+        var employeeIdValue = User.FindFirstValue(
+            ClaimTypes.NameIdentifier
+        );
 
-        if (hasDuplicatedProducts)
+        if (!Guid.TryParse(employeeIdValue, out var employeeId))
         {
-            return BadRequest(new
+            return Unauthorized(new
             {
-                message =
-                    "O mesmo produto não pode aparecer mais de uma vez."
+                message = "Funcionário autenticado inválido."
             });
         }
 
-        var invoice = new Invoice();
+        var employee = await context.Employees
+            .AsNoTracking()
+            .FirstOrDefaultAsync(
+                currentEmployee =>
+                    currentEmployee.Id == employeeId &&
+                    currentEmployee.IsActive,
+                cancellationToken
+            );
+
+        if (employee is null)
+        {
+            return Unauthorized(new
+            {
+                message =
+                    "Funcionário não encontrado ou desativado."
+            });
+        }
+
+        var hasDuplicatedProducts = request.Items
+                .GroupBy(item => item.ProductId)
+                .Any(group => group.Count() > 1);
+
+            if (hasDuplicatedProducts)
+            {
+                return BadRequest(new
+                {
+                    message =
+                        "O mesmo produto não pode aparecer mais de uma vez."
+                });
+            }
+
+        var invoice = new Invoice
+        {
+            IssuedByEmployeeId = employee.Id,
+            IssuedByName = employee.Name
+        };
 
         foreach (var requestedItem in request.Items)
         {

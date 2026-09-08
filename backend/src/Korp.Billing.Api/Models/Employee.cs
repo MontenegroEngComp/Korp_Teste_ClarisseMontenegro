@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Korp.Billing.Api.Models;
 
 public sealed class Employee
@@ -15,6 +17,9 @@ public sealed class Employee
     public EmployeeRole Role { get; set; } = EmployeeRole.Operator;
 
     public bool IsActive { get; set; } = true;
+
+    [JsonIgnore]
+    public string PasswordHash { get; set; } = string.Empty;
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
