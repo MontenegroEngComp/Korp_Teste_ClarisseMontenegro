@@ -17,6 +17,8 @@ export interface Invoice {
   status: InvoiceStatus;
   createdAt: string;
   closedAt: string | null;
+  issuedByEmployeeId: string | null;
+  issuedByName: string | null;
   items: InvoiceItem[];
   total: number;
 }

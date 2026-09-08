@@ -1,0 +1,102 @@
+<section class="login-page">
+  <aside class="brand-panel">
+    <a class="brand" href="/">
+      <span class="brand-mark">K</span>
+
+      <span>
+        <strong>Korp Nexus</strong>
+        <small>OPERAÇÕES</small>
+      </span>
+    </a>
+
+    <div class="brand-content">
+      <span class="eyebrow">Gestão integrada</span>
+
+      <h1>Controle sua operação em um só lugar.</h1>
+
+      <p>
+        Acompanhe produtos, estoque e notas fiscais
+        com segurança e praticidade.
+      </p>
+    </div>
+  </aside>
+
+  <main class="login-area">
+    <article class="login-card">
+      <div class="login-header">
+        <span class="eyebrow">Acesso seguro</span>
+        <h2>Entrar no Korp Nexus</h2>
+
+        <p>
+          Use o e-mail e a senha cadastrados para
+          acessar o sistema.
+        </p>
+      </div>
+
+      @if (errorMessage()) {
+        <div class="alert-error">
+          {{ errorMessage() }}
+        </div>
+      }
+
+      <form
+        [formGroup]="form"
+        (ngSubmit)="submit()"
+      >
+        <label>
+          E-mail
+
+          <input
+            type="email"
+            formControlName="email"
+            placeholder="nome@empresa.com"
+            autocomplete="email"
+          />
+
+          @if (
+            form.controls.email.touched &&
+            form.controls.email.invalid
+          ) {
+            <small>Informe um e-mail válido.</small>
+          }
+        </label>
+
+        <label>
+          Senha
+
+          <input
+            type="password"
+            formControlName="password"
+            placeholder="Digite sua senha"
+            autocomplete="current-password"
+          />
+
+          @if (
+            form.controls.password.touched &&
+            form.controls.password.invalid
+          ) {
+            <small>
+              A senha deve possuir pelo menos 8 caracteres.
+            </small>
+          }
+        </label>
+
+        <button
+          type="submit"
+          [disabled]="isLoading()"
+        >
+          {{
+            isLoading()
+              ? 'Entrando...'
+              : 'Entrar'
+          }}
+        </button>
+      </form>
+
+      <div class="secure-message">
+        <span></span>
+        Ambiente protegido e acesso restrito
+      </div>
+    </article>
+  </main>
+</section>

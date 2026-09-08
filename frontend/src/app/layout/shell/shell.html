@@ -15,6 +15,7 @@
       <a
         routerLink="/dashboard"
         routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
       >
         <span class="nav-icon">V</span>
         Visão geral
@@ -40,6 +41,7 @@
       <a
         routerLink="/invoices/new"
         routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
       >
         <span class="nav-icon">+</span>
         Nova nota
@@ -63,12 +65,25 @@
     </nav>
 
     <div class="sidebar-footer">
-      <span class="avatar">CM</span>
+      @if (currentEmployee(); as employee) {
+        <span class="avatar">
+          {{ employeeInitials() }}
+        </span>
 
-      <span class="user-data">
-        <strong>Clarisse Montenegro</strong>
-        <small>Administradora</small>
-      </span>
+        <span class="user-data">
+          <strong>{{ employee.name }}</strong>
+          <small>{{ roleLabel() }}</small>
+        </span>
+      }
+
+      <button
+        class="logout-button"
+        type="button"
+        aria-label="Sair do sistema"
+        (click)="logout()"
+      >
+        Sair
+      </button>
     </div>
   </aside>
 

@@ -88,6 +88,7 @@
             <tr>
               <th>Número</th>
               <th>Emissão</th>
+              <th>Emitida por</th>
               <th>Itens</th>
               <th>Status</th>
               <th>Valor</th>
@@ -104,6 +105,10 @@
 
                 <td>
                   {{ invoice.createdAt | date: 'dd/MM/yyyy HH:mm' }}
+                </td>
+
+                <td>
+                  {{ invoice.issuedByName ?? 'Registro anterior' }}
                 </td>
 
                 <td>{{ invoice.items.length }}</td>
@@ -185,6 +190,14 @@
       <div>
         <span>Status</span>
         <strong>Fechada</strong>
+      </div>
+
+      <div>
+        <span>Emitida por</span>
+
+        <strong>
+          {{ invoice.issuedByName ?? 'Registro anterior' }}
+        </strong>
       </div>
     </div>
 

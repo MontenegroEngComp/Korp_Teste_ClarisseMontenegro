@@ -19,6 +19,7 @@ import { finalize } from 'rxjs';
 import { Product } from '../../core/models/product';
 import { Billing } from '../../core/services/billing';
 import { Stock } from '../../core/services/stock';
+import { Auth } from '../../core/services/auth';
 
 interface SelectedInvoiceItem {
   product: Product;
@@ -39,6 +40,9 @@ export class InvoiceCreate implements OnInit {
   private readonly stockService = inject(Stock);
   private readonly billingService = inject(Billing);
   private readonly router = inject(Router);
+  private readonly auth = inject(Auth);
+
+  readonly currentEmployee = this.auth.currentEmployee;
 
   readonly products = signal<Product[]>([]);
   readonly selectedItems =
