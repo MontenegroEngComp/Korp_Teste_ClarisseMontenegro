@@ -41,3 +41,21 @@ button,
 a {
   -webkit-tap-highlight-color: transparent;
 }
+
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+
+  app-invoices,
+  app-invoices .print-document,
+  app-invoices .print-document * {
+    visibility: visible !important;
+  }
+
+  app-invoices {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+  }
+}

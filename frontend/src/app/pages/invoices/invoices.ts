@@ -23,8 +23,9 @@ export class Invoices implements OnInit {
   private readonly billingService = inject(Billing);
 
   readonly invoices = signal<Invoice[]>([]);
+  readonly invoiceToPrint = signal<Invoice | null>(null);
   readonly isLoading = signal(true);
-  readonly isClosing = signal<string | null>(null);
+  readonly isPrinting = signal<string | null>(null);
   readonly errorMessage = signal<string | null>(null);
   readonly successMessage = signal<string | null>(null);
 
@@ -75,9 +76,9 @@ export class Invoices implements OnInit {
       });
   }
 
-  closeInvoice(invoice: Invoice): void {
+  printInvoice(invoice: Invoice): void {
     const confirmed = window.confirm(
-      `Deseja fechar a nota #${invoice.number}?`,
+      `Deseja imprimir e fechar a nota #${invoice.number}?`,
     );
 
     if (!confirmed) {
@@ -86,12 +87,12 @@ export class Invoices implements OnInit {
 
     this.errorMessage.set(null);
     this.successMessage.set(null);
-    this.isClosing.set(invoice.id);
+    this.isPrinting.set(invoice.id);
 
     this.billingService
       .close(invoice.id)
       .pipe(
-        finalize(() => this.isClosing.set(null)),
+        finalize(() => this.isPrinting.set(null)),
       )
       .subscribe({
         next: (closedInvoice) => {
@@ -103,14 +104,20 @@ export class Invoices implements OnInit {
             ),
           );
 
+          this.invoiceToPrint.set(closedInvoice);
           this.successMessage.set(
-            `Nota #${closedInvoice.number} fechada com sucesso.`,
+            `Nota #${closedInvoice.number} impressa e fechada com sucesso.`,
           );
+
+          window.setTimeout(() => {
+            window.print();
+            this.invoiceToPrint.set(null);
+          }, 200);
         },
         error: (error: HttpErrorResponse) =>
           this.errorMessage.set(
             error.error?.message ??
-              'Não foi possível fechar a nota fiscal.',
+              'Não foi possível imprimir a nota fiscal.',
           ),
       });
   }
