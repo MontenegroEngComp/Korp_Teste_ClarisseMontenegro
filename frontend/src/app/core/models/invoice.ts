@@ -20,3 +20,12 @@ export interface Invoice {
   items: InvoiceItem[];
   total: number;
 }
+
+export interface CreateInvoiceItemRequest {
+  productId: string;
+  quantity: number;
+}
+
+export interface CreateInvoiceRequest {
+  items: CreateInvoiceItemRequest[];
+}

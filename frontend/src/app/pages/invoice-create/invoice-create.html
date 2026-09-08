@@ -1,1 +1,184 @@
-<p>invoice-create works!</p>
+<section class="page">
+  <header class="page-header">
+    <div>
+      <span class="eyebrow">Faturamento</span>
+      <h1>Abrir nota fiscal</h1>
+      <p>
+        Selecione os produtos e informe as quantidades.
+      </p>
+    </div>
+
+    <a
+      class="secondary-button"
+      routerLink="/invoices"
+    >
+      Voltar
+    </a>
+  </header>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  <div class="content-grid">
+    <article class="content-card">
+      <div class="card-header">
+        <span class="eyebrow">Novo item</span>
+        <h2>Adicionar produto</h2>
+      </div>
+
+      <form
+        class="item-form"
+        [formGroup]="itemForm"
+        (ngSubmit)="addItem()"
+      >
+        <label>
+          Produto
+
+          <select formControlName="productId">
+            <option value="">
+              Selecione um produto
+            </option>
+
+            @for (product of products(); track product.id) {
+              <option [value]="product.id">
+                {{ product.code }} —
+                {{ product.description }}
+                (estoque: {{ product.stockQuantity }})
+              </option>
+            }
+          </select>
+        </label>
+
+        <label>
+          Quantidade
+
+          <input
+            type="number"
+            min="1"
+            formControlName="quantity"
+          />
+        </label>
+
+        <button
+          class="primary-button"
+          type="submit"
+          [disabled]="isLoading()"
+        >
+          Adicionar item
+        </button>
+      </form>
+    </article>
+
+    <aside class="summary-card">
+      <span class="eyebrow">Resumo</span>
+      <h2>Nova nota</h2>
+
+      <div class="summary-row">
+        <span>Produtos</span>
+        <strong>{{ selectedItems().length }}</strong>
+      </div>
+
+      <div class="summary-total">
+        <span>Valor total</span>
+        <strong>
+          {{ total() | currency: 'BRL' }}
+        </strong>
+      </div>
+
+      <button
+        class="primary-button submit-button"
+        type="button"
+        [disabled]="
+          isSaving() ||
+          selectedItems().length === 0
+        "
+        (click)="submit()"
+      >
+        {{
+          isSaving()
+            ? 'Abrindo nota...'
+            : 'Abrir nota fiscal'
+        }}
+      </button>
+    </aside>
+  </div>
+
+  <article class="items-card">
+    <div class="card-header items-header">
+      <div>
+        <span class="eyebrow">Itens</span>
+        <h2>Produtos selecionados</h2>
+      </div>
+
+      <span class="count">
+        {{ selectedItems().length }}
+      </span>
+    </div>
+
+    @if (selectedItems().length === 0) {
+      <div class="state-message">
+        Nenhum produto foi adicionado.
+      </div>
+    } @else {
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Produto</th>
+              <th>Preço</th>
+              <th>Quantidade</th>
+              <th>Subtotal</th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (
+              item of selectedItems();
+              track item.product.id
+            ) {
+              <tr>
+                <td>
+                  <strong>{{ item.product.code }}</strong>
+                  <span class="description">
+                    {{ item.product.description }}
+                  </span>
+                </td>
+
+                <td>
+                  {{
+                    item.product.unitPrice
+                      | currency: 'BRL'
+                  }}
+                </td>
+
+                <td>{{ item.quantity }}</td>
+
+                <td class="item-total">
+                  {{
+                    item.product.unitPrice *
+                      item.quantity
+                      | currency: 'BRL'
+                  }}
+                </td>
+
+                <td class="actions">
+                  <button
+                    class="remove-button"
+                    type="button"
+                    (click)="removeItem(item.product.id)"
+                  >
+                    Remover
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </article>
+</section>
