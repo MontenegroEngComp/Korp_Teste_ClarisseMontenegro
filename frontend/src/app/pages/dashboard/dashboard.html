@@ -1,0 +1,281 @@
+<section class="dashboard">
+  <header class="dashboard-header">
+    <div>
+      <span class="eyebrow">Visão geral</span>
+      <h1>Olá, Clarisse.</h1>
+      <p>
+        Acompanhe a operação do Korp Nexus em tempo real.
+      </p>
+    </div>
+
+    <div class="header-actions">
+      <span class="live-status">
+        <span class="live-dot"></span>
+        Operação em tempo real
+      </span>
+
+      <a
+        class="primary-button"
+        routerLink="/invoices/new"
+      >
+        Nova nota fiscal
+      </a>
+    </div>
+  </header>
+
+  @if (errorMessage()) {
+    <div class="alert">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  <div class="metrics-grid">
+    <article class="metric-card">
+      <div class="metric-top">
+        <span>Produtos cadastrados</span>
+        <span class="metric-icon">P</span>
+      </div>
+
+      <strong>
+        {{ isLoading() ? '—' : products().length }}
+      </strong>
+
+      <small>Catálogo ativo</small>
+    </article>
+
+    <article class="metric-card">
+      <div class="metric-top">
+        <span>Notas emitidas hoje</span>
+        <span class="metric-icon">N</span>
+      </div>
+
+      <strong>
+        {{ isLoading() ? '—' : invoicesToday().length }}
+      </strong>
+
+      <small>
+        {{
+          invoicesToday().length
+        }}
+        no período atual
+      </small>
+    </article>
+
+    <article class="metric-card">
+      <div class="metric-top">
+        <span>Unidades movimentadas</span>
+        <span class="metric-icon">U</span>
+      </div>
+
+      <strong>
+        {{ isLoading() ? '—' : unitsMoved() }}
+      </strong>
+
+      <small>Em notas fechadas</small>
+    </article>
+
+    <article class="metric-card health-card">
+      <div class="metric-top">
+        <span>Saúde dos serviços</span>
+        <span class="metric-icon">S</span>
+      </div>
+
+      <strong>{{ serviceHealth() }}</strong>
+
+      <small>
+        Estoque e faturamento
+      </small>
+    </article>
+  </div>
+
+  <div class="dashboard-grid">
+    <article class="panel flow-panel">
+      <div class="panel-header">
+        <div>
+          <span class="eyebrow">Movimentação</span>
+          <h2>Fluxo de notas</h2>
+        </div>
+
+        <span class="period">Últimos 7 dias</span>
+      </div>
+
+      <div class="chart">
+        @for (day of weeklyFlow(); track day.label) {
+          <div class="chart-column">
+            <div class="bar-area">
+              <span
+                class="bar-value"
+                [style.bottom.%]="day.height"
+              >
+                {{ day.count }}
+              </span>
+
+              <span
+                class="chart-bar"
+                [style.height.%]="day.height"
+              ></span>
+            </div>
+
+            <span class="chart-label">
+              {{ day.label }}
+            </span>
+          </div>
+        }
+      </div>
+    </article>
+
+    <article class="panel stock-panel">
+      <div class="panel-header">
+        <div>
+          <span class="eyebrow warning-eyebrow">
+            Atenção
+          </span>
+          <h2>Atenção no estoque</h2>
+        </div>
+
+        <a routerLink="/products">Ver todos</a>
+      </div>
+
+      <p class="panel-description">
+        Itens abaixo do nível ideal.
+      </p>
+
+      @if (isLoading()) {
+        <div class="empty-state">
+          Carregando produtos...
+        </div>
+      } @else if (lowStockProducts().length === 0) {
+        <div class="empty-state">
+          Nenhum produto com estoque baixo.
+        </div>
+      } @else {
+        <div class="stock-list">
+          @for (
+            product of lowStockProducts();
+            track product.id
+          ) {
+            <div class="stock-item">
+              <span class="product-mark">
+                {{ product.code.charAt(0) }}
+              </span>
+
+              <div>
+                <strong>
+                  {{ product.description }}
+                </strong>
+                <small>{{ product.code }}</small>
+              </div>
+
+              <span class="stock-quantity">
+                {{ product.stockQuantity }} un.
+              </span>
+            </div>
+          }
+        </div>
+      }
+
+      <a
+        class="stock-action"
+        routerLink="/products"
+      >
+        Gerenciar estoque
+      </a>
+    </article>
+  </div>
+
+  <article class="panel invoices-panel">
+    <div class="panel-header">
+      <div>
+        <span class="eyebrow">Atividade recente</span>
+        <h2>Emissões de hoje</h2>
+      </div>
+
+      <a routerLink="/invoices">
+        Ver todas
+      </a>
+    </div>
+
+    @if (isLoading()) {
+      <div class="empty-state">
+        Carregando emissões...
+      </div>
+    } @else if (invoicesToday().length === 0) {
+      <div class="empty-state">
+        Nenhuma nota emitida hoje.
+      </div>
+    } @else {
+      <div class="table-hint">
+        Deslize a tabela para visualizar todos os dados.
+      </div>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Nota fiscal</th>
+              <th>Status</th>
+              <th>Emitida por</th>
+              <th>Itens</th>
+              <th>Unidades</th>
+              <th>Emitida em</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (
+              invoice of invoicesToday();
+              track invoice.id
+            ) {
+              <tr>
+                <td class="invoice-number">
+                  NF-{{
+                    invoice.number
+                      .toString()
+                      .padStart(6, '0')
+                  }}
+                </td>
+
+                <td>
+                  <span
+                    class="status"
+                    [class.open]="invoice.status === 'Open'"
+                    [class.closed]="invoice.status === 'Closed'"
+                  >
+                    {{
+                      invoice.status === 'Open'
+                        ? 'Aberta'
+                        : 'Fechada'
+                    }}
+                  </span>
+                </td>
+
+                <td>
+                  <span class="pending-issuer">
+                    Integração pendente
+                  </span>
+                </td>
+
+                <td>
+                  {{ invoice.items.length }}
+                  produtos
+                </td>
+
+                <td>
+                  {{ getInvoiceUnits(invoice) }} un.
+                </td>
+
+                <td>
+                  Hoje,
+                  {{
+                    invoice.createdAt
+                      | date: 'HH:mm'
+                  }}
+                </td>
+              </tr>
+            }
+         </tbody>
+        </table>
+      </div>
+    }
+  </article>
+</section>

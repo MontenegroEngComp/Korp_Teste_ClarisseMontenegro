@@ -1,189 +1,200 @@
-<header class="page-header">
-  <div>
-    <span class="eyebrow">Controle de estoque</span>
-    <h1>Produtos</h1>
-    <p>Cadastre produtos e acompanhe os saldos disponíveis.</p>
-  </div>
-
-  <button
-    class="secondary-button"
-    type="button"
-    [disabled]="isLoading()"
-    (click)="loadProducts()"
-  >
-    Atualizar
-  </button>
-</header>
-
-<section class="stats">
-  <article>
-    <span>Produtos cadastrados</span>
-    <strong>{{ products().length }}</strong>
-  </article>
-
-  <article>
-    <span>Unidades em estoque</span>
-    <strong>{{ totalUnits() }}</strong>
-  </article>
-
-  <article>
-    <span>Valor do estoque</span>
-    <strong>
-      {{ inventoryValue() | currency: 'BRL' }}
-    </strong>
-  </article>
-</section>
-
-@if (successMessage()) {
-  <div class="alert success">
-    {{ successMessage() }}
-  </div>
-}
-
-@if (errorMessage()) {
-  <div class="alert error">
-    {{ errorMessage() }}
-  </div>
-}
-
-<section class="content-grid">
-  <article class="card form-card">
-    <div class="card-header">
-      <div>
-        <span class="eyebrow">Novo registro</span>
-        <h2>Cadastrar produto</h2>
-      </div>
+<section class="page">
+  <header class="page-header">
+    <div>
+      <span class="eyebrow">Controle de estoque</span>
+      <h1>Produtos</h1>
+      <p>Cadastre produtos e acompanhe os saldos disponíveis.</p>
     </div>
 
-    <form [formGroup]="form" (ngSubmit)="submit()">
-      <label>
-        Código
-        <input
-          type="text"
-          formControlName="code"
-          placeholder="Ex.: PRD-002"
-        />
+    <button
+      class="secondary-button"
+      type="button"
+      [disabled]="isLoading()"
+      (click)="loadProducts()"
+    >
+      Atualizar
+    </button>
+  </header>
 
-        @if (
-          form.controls.code.touched &&
-          form.controls.code.invalid
-        ) {
-          <small>Informe de 2 a 50 caracteres.</small>
-        }
-      </label>
+  <section class="stats">
+    <article>
+      <span>Produtos cadastrados</span>
+      <strong>{{ products().length }}</strong>
+    </article>
 
-      <label>
-        Descrição
-        <input
-          type="text"
-          formControlName="description"
-          placeholder="Nome do produto"
-        />
+    <article>
+      <span>Unidades em estoque</span>
+      <strong>{{ totalUnits() }}</strong>
+    </article>
 
-        @if (
-          form.controls.description.touched &&
-          form.controls.description.invalid
-        ) {
-          <small>Informe de 3 a 200 caracteres.</small>
-        }
-      </label>
+    <article>
+      <span>Valor do estoque</span>
+      <strong>
+        {{ inventoryValue() | currency: 'BRL' }}
+      </strong>
+    </article>
+  </section>
 
-      <div class="form-row">
+  @if (successMessage()) {
+    <div class="alert success">
+      {{ successMessage() }}
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <div class="alert error">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  <section class="content-grid">
+    <article class="card form-card">
+      <div class="card-header">
+        <div>
+          <span class="eyebrow">Novo registro</span>
+          <h2>Cadastrar produto</h2>
+        </div>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="submit()">
         <label>
-          Saldo inicial
+          Código
+
           <input
-            type="number"
-            min="0"
-            formControlName="stockQuantity"
+            type="text"
+            formControlName="code"
+            placeholder="Ex.: PRD-002"
           />
 
           @if (
-            form.controls.stockQuantity.touched &&
-            form.controls.stockQuantity.invalid
+            form.controls.code.touched &&
+            form.controls.code.invalid
           ) {
-            <small>O saldo não pode ser negativo.</small>
+            <small>Informe de 2 a 50 caracteres.</small>
           }
         </label>
 
         <label>
-          Preço unitário
+          Descrição
+
           <input
-            type="number"
-            min="0.01"
-            step="0.01"
-            formControlName="unitPrice"
+            type="text"
+            formControlName="description"
+            placeholder="Nome do produto"
           />
 
           @if (
-            form.controls.unitPrice.touched &&
-            form.controls.unitPrice.invalid
+            form.controls.description.touched &&
+            form.controls.description.invalid
           ) {
-            <small>Informe um preço maior que zero.</small>
+            <small>Informe de 3 a 200 caracteres.</small>
           }
         </label>
-      </div>
 
-      <button
-        class="primary-button"
-        type="submit"
-        [disabled]="isSaving()"
-      >
-        {{ isSaving() ? 'Salvando...' : 'Cadastrar produto' }}
-      </button>
-    </form>
-  </article>
+        <div class="form-row">
+          <label>
+            Saldo inicial
 
-  <article class="card list-card">
-    <div class="card-header">
-      <div>
-        <span class="eyebrow">Catálogo</span>
-        <h2>Produtos cadastrados</h2>
-      </div>
+            <input
+              type="number"
+              min="0"
+              formControlName="stockQuantity"
+            />
 
-      <span class="count">{{ products().length }}</span>
-    </div>
-
-    @if (isLoading()) {
-      <div class="state">Carregando produtos...</div>
-    } @else if (products().length === 0) {
-      <div class="state">
-        Nenhum produto foi cadastrado.
-      </div>
-    } @else {
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>Código</th>
-              <th>Descrição</th>
-              <th>Saldo</th>
-              <th>Preço</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            @for (product of products(); track product.id) {
-              <tr>
-                <td>
-                  <span class="code">{{ product.code }}</span>
-                </td>
-                <td>{{ product.description }}</td>
-                <td>
-                  <span
-                    class="stock"
-                    [class.low]="product.stockQuantity <= 5"
-                  >
-                    {{ product.stockQuantity }}
-                  </span>
-                </td>
-                <td>
-                  {{ product.unitPrice | currency: 'BRL' }}
-                </td>
-              </tr>
+            @if (
+              form.controls.stockQuantity.touched &&
+              form.controls.stockQuantity.invalid
+            ) {
+              <small>O saldo não pode ser negativo.</small>
             }
-          </tbody>
-        </table>
+          </label>
+
+          <label>
+            Preço unitário
+
+            <input
+              type="number"
+              min="0.01"
+              step="0.01"
+              formControlName="unitPrice"
+            />
+
+            @if (
+              form.controls.unitPrice.touched &&
+              form.controls.unitPrice.invalid
+            ) {
+              <small>Informe um preço maior que zero.</small>
+            }
+          </label>
+        </div>
+
+        <button
+          class="primary-button"
+          type="submit"
+          [disabled]="isSaving()"
+        >
+          {{ isSaving() ? 'Salvando...' : 'Cadastrar produto' }}
+        </button>
+      </form>
+    </article>
+
+    <article class="card list-card">
+      <div class="card-header">
+        <div>
+          <span class="eyebrow">Catálogo</span>
+          <h2>Produtos cadastrados</h2>
+        </div>
+
+        <span class="count">{{ products().length }}</span>
       </div>
-    }
-  </article>
+
+      @if (isLoading()) {
+        <div class="state">Carregando produtos...</div>
+      } @else if (products().length === 0) {
+        <div class="state">
+          Nenhum produto foi cadastrado.
+        </div>
+      } @else {
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Descrição</th>
+                <th>Saldo</th>
+                <th>Preço</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @for (product of products(); track product.id) {
+                <tr>
+                  <td>
+                    <span class="code">
+                      {{ product.code }}
+                    </span>
+                  </td>
+
+                  <td>{{ product.description }}</td>
+
+                  <td>
+                    <span
+                      class="stock"
+                      [class.low]="product.stockQuantity <= 5"
+                    >
+                      {{ product.stockQuantity }}
+                    </span>
+                  </td>
+
+                  <td>
+                    {{ product.unitPrice | currency: 'BRL' }}
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </article>
+  </section>
 </section>
