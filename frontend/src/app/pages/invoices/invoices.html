@@ -1,11 +1,9 @@
-<section class="page">
+<section class="page screen-content">
   <header class="page-header">
     <div>
       <span class="eyebrow">Faturamento</span>
       <h1>Notas fiscais</h1>
-      <p>
-        Consulte as notas abertas e fechadas.
-      </p>
+      <p>Consulte as notas abertas e fechadas.</p>
     </div>
 
     <div class="header-actions">
@@ -108,9 +106,7 @@
                   {{ invoice.createdAt | date: 'dd/MM/yyyy HH:mm' }}
                 </td>
 
-                <td>
-                  {{ invoice.items.length }}
-                </td>
+                <td>{{ invoice.items.length }}</td>
 
                 <td>
                   <span
@@ -133,15 +129,15 @@
                 <td class="actions">
                   @if (invoice.status === 'Open') {
                     <button
-                      class="close-button"
+                      class="print-button"
                       type="button"
-                      [disabled]="isClosing() !== null"
-                      (click)="closeInvoice(invoice)"
+                      [disabled]="isPrinting() !== null"
+                      (click)="printInvoice(invoice)"
                     >
                       {{
-                        isClosing() === invoice.id
-                          ? 'Fechando...'
-                          : 'Fechar nota'
+                        isPrinting() === invoice.id
+                          ? 'Processando...'
+                          : 'Imprimir e fechar'
                       }}
                     </button>
                   } @else {
@@ -156,3 +152,73 @@
     }
   </article>
 </section>
+
+@if (invoiceToPrint(); as invoice) {
+  <section class="print-document">
+    <header class="print-header">
+      <div>
+        <h1>Korp</h1>
+        <p>Nota fiscal</p>
+      </div>
+
+      <div class="print-number">
+        <span>Número</span>
+        <strong>#{{ invoice.number }}</strong>
+      </div>
+    </header>
+
+    <div class="print-information">
+      <div>
+        <span>Data de emissão</span>
+        <strong>
+          {{ invoice.createdAt | date: 'dd/MM/yyyy HH:mm' }}
+        </strong>
+      </div>
+
+      <div>
+        <span>Data de fechamento</span>
+        <strong>
+          {{ invoice.closedAt | date: 'dd/MM/yyyy HH:mm' }}
+        </strong>
+      </div>
+
+      <div>
+        <span>Status</span>
+        <strong>Fechada</strong>
+      </div>
+    </div>
+
+    <table class="print-table">
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Descrição</th>
+          <th>Quantidade</th>
+          <th>Preço unitário</th>
+          <th>Subtotal</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (item of invoice.items; track item.id) {
+          <tr>
+            <td>{{ item.productCode }}</td>
+            <td>{{ item.productDescription }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.unitPrice | currency: 'BRL' }}</td>
+            <td>{{ item.subtotal | currency: 'BRL' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+    <div class="print-total">
+      <span>Valor total</span>
+      <strong>{{ invoice.total | currency: 'BRL' }}</strong>
+    </div>
+
+    <footer class="print-footer">
+      Documento gerado pelo sistema Korp.
+    </footer>
+  </section>
+}
