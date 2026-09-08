@@ -8,7 +8,10 @@ public sealed class BillingDbContext(
 ) : DbContext(options)
 {
     public DbSet<Invoice> Invoices => Set<Invoice>();
+
     public DbSet<InvoiceItem> InvoiceItems => Set<InvoiceItem>();
+
+    public DbSet<Employee> Employees => Set<Employee>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -60,7 +63,48 @@ public sealed class BillingDbContext(
                 .IsRequired();
 
             builder.HasIndex(item => item.InvoiceId);
+
             builder.HasIndex(item => item.ProductId);
+        });
+
+        modelBuilder.Entity<Employee>(builder =>
+        {
+            builder.ToTable("employees");
+
+            builder.HasKey(employee => employee.Id);
+
+            builder.Property(employee => employee.Name)
+                .HasMaxLength(150)
+                .IsRequired();
+
+            builder.Property(employee => employee.Cpf)
+                .HasMaxLength(11)
+                .IsRequired();
+
+            builder.HasIndex(employee => employee.Cpf)
+                .IsUnique();
+
+            builder.Property(employee => employee.Email)
+                .HasMaxLength(200)
+                .IsRequired();
+
+            builder.HasIndex(employee => employee.Email)
+                .IsUnique();
+
+            builder.Property(employee => employee.Phone)
+                .HasMaxLength(20)
+                .IsRequired();
+
+            builder.Property(employee => employee.Role)
+                .HasConversion<string>()
+                .HasMaxLength(30)
+                .IsRequired();
+
+            builder.Property(employee => employee.IsActive)
+                .IsRequired();
+
+            builder.Property(employee => employee.CreatedAt)
+                .IsRequired();
         });
     }
 }
