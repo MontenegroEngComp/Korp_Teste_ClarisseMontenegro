@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import {
   Component,
   computed,
@@ -12,7 +13,6 @@ import { finalize } from 'rxjs';
 import { Invoice } from '../../core/models/invoice';
 import { Billing } from '../../core/services/billing';
 
-
 @Component({
   selector: 'app-invoices',
   imports: [CommonModule, RouterLink],
@@ -24,7 +24,9 @@ export class Invoices implements OnInit {
 
   readonly invoices = signal<Invoice[]>([]);
   readonly isLoading = signal(true);
+  readonly isClosing = signal<string | null>(null);
   readonly errorMessage = signal<string | null>(null);
+  readonly successMessage = signal<string | null>(null);
 
   readonly openInvoices = computed(() =>
     this.invoices().filter(
@@ -69,6 +71,46 @@ export class Invoices implements OnInit {
         error: () =>
           this.errorMessage.set(
             'Não foi possível carregar as notas fiscais.',
+          ),
+      });
+  }
+
+  closeInvoice(invoice: Invoice): void {
+    const confirmed = window.confirm(
+      `Deseja fechar a nota #${invoice.number}?`,
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.errorMessage.set(null);
+    this.successMessage.set(null);
+    this.isClosing.set(invoice.id);
+
+    this.billingService
+      .close(invoice.id)
+      .pipe(
+        finalize(() => this.isClosing.set(null)),
+      )
+      .subscribe({
+        next: (closedInvoice) => {
+          this.invoices.update((invoices) =>
+            invoices.map((currentInvoice) =>
+              currentInvoice.id === closedInvoice.id
+                ? closedInvoice
+                : currentInvoice,
+            ),
+          );
+
+          this.successMessage.set(
+            `Nota #${closedInvoice.number} fechada com sucesso.`,
+          );
+        },
+        error: (error: HttpErrorResponse) =>
+          this.errorMessage.set(
+            error.error?.message ??
+              'Não foi possível fechar a nota fiscal.',
           ),
       });
   }

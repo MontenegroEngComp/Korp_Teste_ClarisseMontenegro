@@ -51,6 +51,12 @@
     </article>
   </div>
 
+  @if (successMessage()) {
+    <div class="alert alert-success">
+      {{ successMessage() }}
+    </div>
+  }
+
   @if (errorMessage()) {
     <div class="alert alert-error">
       {{ errorMessage() }}
@@ -87,6 +93,7 @@
               <th>Itens</th>
               <th>Status</th>
               <th>Valor</th>
+              <th>Ações</th>
             </tr>
           </thead>
 
@@ -121,6 +128,25 @@
 
                 <td class="invoice-total">
                   {{ invoice.total | currency: 'BRL' }}
+                </td>
+
+                <td class="actions">
+                  @if (invoice.status === 'Open') {
+                    <button
+                      class="close-button"
+                      type="button"
+                      [disabled]="isClosing() !== null"
+                      (click)="closeInvoice(invoice)"
+                    >
+                      {{
+                        isClosing() === invoice.id
+                          ? 'Fechando...'
+                          : 'Fechar nota'
+                      }}
+                    </button>
+                  } @else {
+                    <span class="no-action">—</span>
+                  }
                 </td>
               </tr>
             }
