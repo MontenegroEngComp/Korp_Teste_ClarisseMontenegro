@@ -1,26 +1,39 @@
 <div class="app-shell">
   <aside class="sidebar">
-    <a class="brand" routerLink="/products">
+    <a class="brand" routerLink="/dashboard">
       <span class="brand-mark">K</span>
 
       <span>
-        <strong>Korp</strong>
-        <small>Notas fiscais</small>
+        <strong>Korp Nexus</strong>
+        <small>Operações</small>
       </span>
     </a>
 
     <nav>
+      <span class="nav-label">Principal</span>
+
+      <a
+        routerLink="/dashboard"
+        routerLinkActive="active"
+      >
+        <span class="nav-icon">V</span>
+        Visão geral
+      </a>
+
       <a
         routerLink="/products"
         routerLinkActive="active"
       >
+        <span class="nav-icon">P</span>
         Produtos
       </a>
 
       <a
         routerLink="/invoices"
         routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
       >
+        <span class="nav-icon">N</span>
         Notas fiscais
       </a>
 
@@ -28,12 +41,51 @@
         routerLink="/invoices/new"
         routerLinkActive="active"
       >
-        Abrir nota
+        <span class="nav-icon">+</span>
+        Nova nota
       </a>
+
+      <span class="nav-label management-label">
+        Gestão
+      </span>
+
+      <span class="nav-item disabled">
+        <span class="nav-icon">R</span>
+        Relatório mensal
+        <small>Em breve</small>
+      </span>
+
+      <span class="nav-item disabled">
+        <span class="nav-icon">F</span>
+        Funcionários
+        <small>Em breve</small>
+      </span>
     </nav>
+
+    <div class="sidebar-footer">
+      <span class="avatar">CM</span>
+
+      <span class="user-data">
+        <strong>Clarisse Montenegro</strong>
+        <small>Administradora</small>
+      </span>
+    </div>
   </aside>
 
-  <main class="content">
-    <router-outlet />
-  </main>
+  <section class="workspace">
+    <header class="topbar">
+      <div class="environment">
+        <span class="status-dot"></span>
+        Ambiente seguro
+      </div>
+
+      <span class="current-date">
+        {{ currentDate }}
+      </span>
+    </header>
+
+    <main class="content">
+      <router-outlet />
+    </main>
+  </section>
 </div>

@@ -15,4 +15,15 @@ import {
   templateUrl: './shell.html',
   styleUrl: './shell.scss',
 })
-export class Shell {}
+export class Shell {
+  readonly currentDate = new Intl.DateTimeFormat(
+    'pt-BR',
+    {
+      weekday: 'long',
+      day: '2-digit',
+      month: 'long',
+    },
+  )
+    .format(new Date())
+    .toUpperCase();
+}

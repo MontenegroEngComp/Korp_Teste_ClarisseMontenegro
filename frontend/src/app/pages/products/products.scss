@@ -2,6 +2,15 @@
   display: block;
 }
 
+.page {
+  width: 100%;
+  min-height: 100%;
+  padding: 36px 44px;
+  box-sizing: border-box;
+  color: var(--color-text);
+  background: var(--color-background);
+}
+
 .page-header {
   display: flex;
   align-items: flex-start;
@@ -264,6 +273,10 @@ tbody tr:last-child td {
 }
 
 @media (max-width: 680px) {
+  .page {
+    padding: 24px 18px;
+  }
+
   .page-header {
     display: grid;
   }
