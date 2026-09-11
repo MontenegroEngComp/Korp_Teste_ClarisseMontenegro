@@ -1,0 +1,316 @@
+<section class="page">
+  <header class="page-header">
+    <div>
+      <span class="eyebrow">Gestão</span>
+      <h1>Funcionários</h1>
+      <p>
+        Cadastre funcionários e gerencie o acesso
+        ao sistema.
+      </p>
+    </div>
+  </header>
+
+  <div class="summary-grid">
+    <article class="summary-card">
+      <span>Total</span>
+      <strong>{{ employees().length }}</strong>
+    </article>
+
+    <article class="summary-card">
+      <span>Ativos</span>
+      <strong>{{ activeCount() }}</strong>
+    </article>
+
+    <article class="summary-card">
+      <span>Inativos</span>
+      <strong>{{ inactiveCount() }}</strong>
+    </article>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  @if (successMessage()) {
+    <div class="alert alert-success">
+      {{ successMessage() }}
+    </div>
+  }
+
+  <div class="content-grid">
+    <article class="content-card form-card">
+      <div class="card-header">
+        <div>
+          <span class="eyebrow">
+            {{ editingId() ? 'Edição' : 'Novo cadastro' }}
+          </span>
+
+          <h2>
+            {{
+              editingId()
+                ? 'Editar funcionário'
+                : 'Cadastrar funcionário'
+            }}
+          </h2>
+        </div>
+
+        @if (editingId()) {
+          <button
+            class="secondary-button"
+            type="button"
+            (click)="cancelEdit()"
+          >
+            Cancelar
+          </button>
+        }
+      </div>
+
+      <form
+        [formGroup]="form"
+        (ngSubmit)="save()"
+      >
+        <label class="full-field">
+          Nome completo
+
+          <input
+            type="text"
+            formControlName="name"
+            placeholder="Nome do funcionário"
+          />
+
+          @if (
+            form.controls.name.touched &&
+            form.controls.name.invalid
+          ) {
+            <small class="field-error">
+              Informe o nome completo.
+            </small>
+          }
+        </label>
+
+        <div class="field-grid">
+          <label>
+            CPF
+
+            <input
+              type="text"
+              inputmode="numeric"
+              maxlength="11"
+              formControlName="cpf"
+              placeholder="Somente números"
+            />
+
+            @if (
+              form.controls.cpf.touched &&
+              form.controls.cpf.invalid
+            ) {
+              <small class="field-error">
+                Informe os 11 números do CPF.
+              </small>
+            }
+          </label>
+
+          <label>
+            Telefone
+
+            <input
+              type="tel"
+              formControlName="phone"
+              placeholder="Telefone com DDD"
+            />
+
+            @if (
+              form.controls.phone.touched &&
+              form.controls.phone.invalid
+            ) {
+              <small class="field-error">
+                Informe o telefone.
+              </small>
+            }
+          </label>
+        </div>
+
+        <label class="full-field">
+          E-mail
+
+          <input
+            type="email"
+            formControlName="email"
+            placeholder="funcionario@korp.local"
+          />
+
+          @if (
+            form.controls.email.touched &&
+            form.controls.email.invalid
+          ) {
+            <small class="field-error">
+              Informe um e-mail válido.
+            </small>
+          }
+        </label>
+
+        <div class="field-grid">
+          <label>
+            Perfil de acesso
+
+            <select formControlName="role">
+              <option value="Operator">
+                Operador
+              </option>
+
+              <option value="Administrator">
+                Administrador
+              </option>
+            </select>
+          </label>
+
+          <label>
+            {{
+              editingId()
+                ? 'Nova senha (opcional)'
+                : 'Senha inicial'
+            }}
+
+            <input
+              type="password"
+              formControlName="password"
+              placeholder="Mínimo de 8 caracteres"
+            />
+
+            @if (
+              form.controls.password.touched &&
+              form.controls.password.invalid
+            ) {
+              <small class="field-error">
+                A senha deve possuir pelo menos
+                8 caracteres.
+              </small>
+            }
+          </label>
+        </div>
+
+        <button
+          class="primary-button"
+          type="submit"
+          [disabled]="isSaving()"
+        >
+          {{
+            isSaving()
+              ? 'Salvando...'
+              : editingId()
+                ? 'Salvar alterações'
+                : 'Cadastrar funcionário'
+          }}
+        </button>
+      </form>
+    </article>
+
+    <article class="content-card list-card">
+      <div class="card-header">
+        <div>
+          <span class="eyebrow">Equipe</span>
+          <h2>Funcionários cadastrados</h2>
+        </div>
+
+        <span class="count">
+          {{ employees().length }}
+        </span>
+      </div>
+
+      @if (isLoading()) {
+        <div class="state-message">
+          Carregando funcionários...
+        </div>
+      } @else if (employees().length === 0) {
+        <div class="state-message">
+          Nenhum funcionário cadastrado.
+        </div>
+      } @else {
+        <div class="employee-list">
+          @for (
+            employee of employees();
+            track employee.id
+          ) {
+            <article
+              class="employee-item"
+              [class.inactive]="!employee.isActive"
+            >
+              <div class="employee-main">
+                <div class="employee-avatar">
+                  {{ employeeInitials(employee.name) }}
+                </div>
+
+                <div>
+                  <div class="employee-name">
+                    <strong>{{ employee.name }}</strong>
+
+                    <span
+                      class="status"
+                      [class.status-active]="employee.isActive"
+                      [class.status-inactive]="!employee.isActive"
+                    >
+                      {{
+                        employee.isActive
+                          ? 'Ativo'
+                          : 'Inativo'
+                      }}
+                    </span>
+                  </div>
+
+                  <span class="employee-email">
+                    {{ employee.email }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="employee-details">
+                <span>
+                  <small>Perfil</small>
+                  {{ roleLabel(employee.role) }}
+                </span>
+
+                <span>
+                  <small>CPF</small>
+                  {{ employee.cpf }}
+                </span>
+
+                <span>
+                  <small>Telefone</small>
+                  {{ employee.phone }}
+                </span>
+              </div>
+
+              <div class="employee-actions">
+                <button
+                  class="secondary-button"
+                  type="button"
+                  (click)="edit(employee)"
+                >
+                  Editar
+                </button>
+
+                <button
+                  class="status-button"
+                  type="button"
+                  [class.activate-button]="!employee.isActive"
+                  [disabled]="processingId() === employee.id"
+                  (click)="toggleStatus(employee)"
+                >
+                  {{
+                    processingId() === employee.id
+                      ? 'Processando...'
+                      : employee.isActive
+                        ? 'Desativar'
+                        : 'Reativar'
+                  }}
+                </button>
+              </div>
+            </article>
+          }
+        </div>
+      }
+    </article>
+  </div>
+</section>

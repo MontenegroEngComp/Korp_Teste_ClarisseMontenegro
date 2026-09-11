@@ -57,11 +57,16 @@
         <small>Em breve</small>
       </span>
 
-      <span class="nav-item disabled">
+    @if (currentEmployee()?.role === 'Administrator') {
+      <a
+        routerLink="/employees"
+        routerLinkActive="active"
+      >
         <span class="nav-icon">F</span>
         Funcionários
-        <small>Em breve</small>
-      </span>
+      </a>
+    }
+
     </nav>
 
     <div class="sidebar-footer">
