@@ -18,6 +18,7 @@ import { Invoice } from '../../core/models/invoice';
 import { Product } from '../../core/models/product';
 import { Billing } from '../../core/services/billing';
 import { Stock } from '../../core/services/stock';
+import { Auth } from '../../core/services/auth';
 
 interface DailyFlow {
   label: string;
@@ -34,7 +35,14 @@ interface DailyFlow {
 export class Dashboard implements OnInit {
   private readonly stockService = inject(Stock);
   private readonly billingService = inject(Billing);
+  private readonly authService = inject(Auth);
 
+  readonly firstName = computed(
+    () =>
+      this.authService
+        .currentEmployee()
+        ?.name.split(' ')[0] ?? 'Usuário',
+  );
   readonly products = signal<Product[]>([]);
   readonly invoices = signal<Invoice[]>([]);
   readonly isLoading = signal(true);
