@@ -9,6 +9,9 @@ import { Invoices } from './pages/invoices/invoices';
 import { Login } from './pages/login/login';
 import { Products } from './pages/products/products';
 import { Employees } from './pages/employees/employees';
+import {
+  MonthlyReport,
+} from './pages/monthly-report/monthly-report';
 
 export const routes: Routes = [
   {
@@ -44,6 +47,11 @@ export const routes: Routes = [
       {
         path: 'employees',
         component: Employees,
+        canActivate: [adminGuard],
+      },
+      {
+        path: 'reports/monthly',
+        component: MonthlyReport,
         canActivate: [adminGuard],
       },
     ],

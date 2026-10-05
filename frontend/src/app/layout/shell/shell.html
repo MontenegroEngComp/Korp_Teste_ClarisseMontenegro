@@ -51,11 +51,15 @@
         Gestão
       </span>
 
-      <span class="nav-item disabled">
+     @if (currentEmployee()?.role === 'Administrator') {
+      <a
+        routerLink="/reports/monthly"
+        routerLinkActive="active"
+      >
         <span class="nav-icon">R</span>
         Relatório mensal
-        <small>Em breve</small>
-      </span>
+      </a>
+}
 
     @if (currentEmployee()?.role === 'Administrator') {
       <a

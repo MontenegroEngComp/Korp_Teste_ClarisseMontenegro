@@ -59,3 +59,43 @@ a {
     width: 100%;
   }
 }
+
+@media print {
+
+    app-monthly-report,
+  app-monthly-report * {
+    visibility: visible !important;
+  }
+
+  app-monthly-report {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  app-shell .sidebar,
+  app-shell .topbar {
+    display: none !important;
+  }
+
+  app-shell .app-shell,
+  app-shell .workspace,
+  app-shell .content {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  body {
+    background: #ffffff !important;
+  }
+
+  @page {
+    size: landscape;
+    margin: 1cm;
+  }
+}
