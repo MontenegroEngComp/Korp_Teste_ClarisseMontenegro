@@ -159,12 +159,11 @@
                     [class.status-closed]="
                       invoice.status === 'Closed'
                     "
+                    [class.status-cancelled]="
+                      invoice.status === 'Cancelled'
+                    "
                   >
-                    {{
-                      invoice.status === 'Closed'
-                        ? 'Fechada'
-                        : 'Aberta'
-                    }}
+                    {{ statusLabels[invoice.status] }}
                   </span>
                 </td>
 

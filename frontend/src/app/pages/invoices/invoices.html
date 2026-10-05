@@ -3,7 +3,7 @@
     <div>
       <span class="eyebrow">Faturamento</span>
       <h1>Notas fiscais</h1>
-      <p>Consulte as notas abertas e fechadas.</p>
+      <p>Consulte as notas abertas, fechadas e canceladas.</p>
     </div>
 
     <div class="header-actions">
@@ -118,12 +118,9 @@
                     class="status"
                     [class.status-open]="invoice.status === 'Open'"
                     [class.status-closed]="invoice.status === 'Closed'"
+                    [class.status-cancelled]="invoice.status === 'Cancelled'"
                   >
-                    {{
-                      invoice.status === 'Open'
-                        ? 'Aberta'
-                        : 'Fechada'
-                    }}
+                    {{ statusLabels[invoice.status] }}
                   </span>
                 </td>
 
@@ -143,6 +140,19 @@
                         isPrinting() === invoice.id
                           ? 'Processando...'
                           : 'Imprimir e fechar'
+                      }}
+                    </button>
+                  } @else if (invoice.status === 'Closed') {
+                    <button
+                      class="cancel-button"
+                      type="button"
+                      [disabled]="isCancelling() !== null"
+                      (click)="cancelInvoice(invoice)"
+                    >
+                      {{
+                        isCancelling() === invoice.id
+                          ? 'Cancelando...'
+                          : 'Cancelar nota'
                       }}
                     </button>
                   } @else {

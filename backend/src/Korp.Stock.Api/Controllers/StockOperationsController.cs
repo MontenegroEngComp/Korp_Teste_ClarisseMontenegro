@@ -93,4 +93,96 @@ public sealed class StockOperationsController(
 
         return NoContent();
     }
+
+    [HttpPost("increase-batch")]
+    public async Task<IActionResult> IncreaseBatch(
+        IncreaseStockBatchRequest request,
+        CancellationToken cancellationToken
+    )
+    {
+        var hasDuplicatedProducts = request.Items
+            .GroupBy(item => item.ProductId)
+            .Any(group => group.Count() > 1);
+
+        if (hasDuplicatedProducts)
+        {
+            return BadRequest(new
+            {
+                message =
+                    "O mesmo produto não pode aparecer mais de uma vez."
+            });
+        }
+
+        var productIds = request.Items
+            .Select(item => item.ProductId!.Value)
+            .ToList();
+
+        await using var transaction =
+            await context.Database.BeginTransactionAsync(
+                cancellationToken
+            );
+
+        var existingProductIds = await context.Products
+            .AsNoTracking()
+            .Where(product => productIds.Contains(product.Id))
+            .Select(product => product.Id)
+            .ToListAsync(cancellationToken);
+
+        var missingProductId = productIds
+            .Except(existingProductIds)
+            .Select(productId => (Guid?)productId)
+            .FirstOrDefault();
+
+        if (missingProductId is not null)
+        {
+            await transaction.RollbackAsync(cancellationToken);
+
+            return NotFound(new
+            {
+                message =
+                    $"O produto {missingProductId} não foi encontrado."
+            });
+        }
+
+        var updatedAt = DateTime.UtcNow;
+
+        foreach (var requestedItem in request.Items)
+        {
+            var productId = requestedItem.ProductId!.Value;
+
+            var affectedRows = await context.Products
+                .Where(product => product.Id == productId)
+                .ExecuteUpdateAsync(
+                    setters => setters
+                        .SetProperty(
+                            product => product.StockQuantity,
+                            product =>
+                                product.StockQuantity +
+                                requestedItem.Quantity
+                        )
+                        .SetProperty(
+                            product => product.UpdatedAt,
+                            updatedAt
+                        ),
+                    cancellationToken
+                );
+
+            if (affectedRows == 0)
+            {
+                await transaction.RollbackAsync(
+                    cancellationToken
+                );
+
+                return NotFound(new
+                {
+                    message =
+                        $"O produto {productId} não foi encontrado."
+                });
+            }
+        }
+
+        await transaction.CommitAsync(cancellationToken);
+
+        return NoContent();
+    }
 }

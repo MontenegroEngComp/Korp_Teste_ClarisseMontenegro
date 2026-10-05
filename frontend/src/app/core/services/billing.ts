@@ -40,4 +40,11 @@ export class Billing {
       {},
     );
   }
+
+  cancel(id: string): Observable<Invoice> {
+    return this.http.post<Invoice>(
+      `${this.apiUrl}/${id}/cancel`,
+      {},
+    );
+  }
 }

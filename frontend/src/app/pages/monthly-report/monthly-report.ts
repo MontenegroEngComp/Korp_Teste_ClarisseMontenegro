@@ -9,7 +9,10 @@ import {
 import { HttpErrorResponse } from '@angular/common/http';
 import { finalize } from 'rxjs';
 
-import { Invoice } from '../../core/models/invoice';
+import {
+  Invoice,
+  INVOICE_STATUS_LABELS,
+} from '../../core/models/invoice';
 import { Auth } from '../../core/services/auth';
 import { Billing } from '../../core/services/billing';
 
@@ -29,6 +32,8 @@ export class MonthlyReport implements OnInit {
   readonly selectedMonth = signal(
     this.currentMonthValue(),
   );
+
+  readonly statusLabels = INVOICE_STATUS_LABELS;
 
   readonly currentEmployee =
     this.authService.currentEmployee;
@@ -62,9 +67,15 @@ export class MonthlyReport implements OnInit {
       ).length,
   );
 
+  readonly billableInvoices = computed(() =>
+    this.filteredInvoices().filter(
+      (invoice) => invoice.status !== 'Cancelled',
+    ),
+  );
+
   readonly totalValue = computed(
     () =>
-      this.filteredInvoices().reduce(
+      this.billableInvoices().reduce(
         (total, invoice) => total + invoice.total,
         0,
       ),
@@ -72,7 +83,7 @@ export class MonthlyReport implements OnInit {
 
   readonly totalUnits = computed(
     () =>
-      this.filteredInvoices().reduce(
+      this.billableInvoices().reduce(
         (total, invoice) =>
           total +
           invoice.items.reduce(
@@ -137,9 +148,7 @@ export class MonthlyReport implements OnInit {
           'pt-BR',
         ),
         invoice.issuedByName ?? 'Registro anterior',
-        invoice.status === 'Closed'
-          ? 'Fechada'
-          : 'Aberta',
+        this.statusLabels[invoice.status],
         invoice.items.length.toString(),
         invoice.items
           .reduce(
