@@ -1,0 +1,201 @@
+<section class="page">
+  <header class="page-header">
+    <div>
+      <span class="eyebrow">Relatórios</span>
+      <h1>Relatório mensal</h1>
+      <p>
+        Consulte o faturamento e as emissões
+        realizadas em cada mês.
+      </p>
+    </div>
+
+    <div class="header-actions screen-only">
+      <button
+        class="secondary-button"
+        type="button"
+        [disabled]="filteredInvoices().length === 0"
+        (click)="downloadCsv()"
+      >
+        Exportar CSV
+      </button>
+
+      <button
+        class="primary-button"
+        type="button"
+        [disabled]="filteredInvoices().length === 0"
+        (click)="printReport()"
+      >
+        Imprimir relatório
+      </button>
+    </div>
+  </header>
+
+  <article class="period-card screen-only">
+    <label>
+      Período do relatório
+
+      <input
+        type="month"
+        [value]="selectedMonth()"
+        (change)="changeMonth($event)"
+      />
+    </label>
+
+    <div>
+      <span>Período selecionado</span>
+      <strong>{{ periodLabel() }}</strong>
+    </div>
+  </article>
+
+  @if (errorMessage()) {
+    <div class="alert alert-error">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  <header class="print-header">
+    <span>Korp Nexus — Faturamento</span>
+    <h1>Relatório mensal</h1>
+    <p>{{ periodLabel() }}</p>
+  </header>
+
+  <div class="summary-grid">
+    <article class="summary-card">
+      <span>Notas emitidas</span>
+      <strong>{{ filteredInvoices().length }}</strong>
+    </article>
+
+    <article class="summary-card">
+      <span>Notas fechadas</span>
+      <strong>{{ closedCount() }}</strong>
+    </article>
+
+    <article class="summary-card">
+      <span>Notas abertas</span>
+      <strong>{{ openCount() }}</strong>
+    </article>
+
+    <article class="summary-card">
+      <span>Unidades movimentadas</span>
+      <strong>{{ totalUnits() }}</strong>
+    </article>
+
+    <article class="summary-card value-card">
+      <span>Valor total</span>
+      <strong>
+        {{ totalValue() | currency: 'BRL' }}
+      </strong>
+    </article>
+  </div>
+
+  <article class="content-card">
+    <div class="card-header">
+      <div>
+        <span class="eyebrow">
+          Detalhamento
+        </span>
+
+        <h2>Notas do período</h2>
+      </div>
+
+      <span class="count">
+        {{ filteredInvoices().length }}
+      </span>
+    </div>
+
+    @if (isLoading()) {
+      <div class="state-message">
+        Carregando relatório...
+      </div>
+    } @else if (filteredInvoices().length === 0) {
+      <div class="state-message">
+        Nenhuma nota fiscal foi emitida neste mês.
+      </div>
+    } @else {
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Número</th>
+              <th>Emissão</th>
+              <th>Emitida por</th>
+              <th>Status</th>
+              <th>Itens</th>
+              <th>Unidades</th>
+              <th>Valor</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            @for (
+              invoice of filteredInvoices();
+              track invoice.id
+            ) {
+              <tr>
+                <td class="invoice-number">
+                  #{{ invoice.number }}
+                </td>
+
+                <td>
+                  {{
+                    invoice.createdAt
+                      | date: 'dd/MM/yyyy HH:mm'
+                  }}
+                </td>
+
+                <td>
+                  {{
+                    invoice.issuedByName ??
+                      'Registro anterior'
+                  }}
+                </td>
+
+                <td>
+                  <span
+                    class="status"
+                    [class.status-open]="
+                      invoice.status === 'Open'
+                    "
+                    [class.status-closed]="
+                      invoice.status === 'Closed'
+                    "
+                  >
+                    {{
+                      invoice.status === 'Closed'
+                        ? 'Fechada'
+                        : 'Aberta'
+                    }}
+                  </span>
+                </td>
+
+                <td>{{ invoice.items.length }}</td>
+
+                <td>
+                  {{ invoiceUnits(invoice) }}
+                </td>
+
+                <td class="invoice-value">
+                  {{ invoice.total | currency: 'BRL' }}
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+    <footer class="report-footer">
+      <span>
+        Período: {{ periodLabel() }}
+      </span>
+
+      <span>
+        Gerado por:
+        {{
+          currentEmployee()?.name ??
+            'Usuário autenticado'
+        }}
+      </span>
+    </footer>
+  </article>
+</section>
