@@ -10,7 +10,10 @@ import {
 import { RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 
-import { Invoice } from '../../core/models/invoice';
+import {
+  Invoice,
+  INVOICE_STATUS_LABELS,
+} from '../../core/models/invoice';
 import { Billing } from '../../core/services/billing';
 
 @Component({
@@ -26,8 +29,10 @@ export class Invoices implements OnInit {
   readonly invoiceToPrint = signal<Invoice | null>(null);
   readonly isLoading = signal(true);
   readonly isPrinting = signal<string | null>(null);
+  readonly isCancelling = signal<string | null>(null);
   readonly errorMessage = signal<string | null>(null);
   readonly successMessage = signal<string | null>(null);
+  readonly statusLabels = INVOICE_STATUS_LABELS;
 
   readonly openInvoices = computed(() =>
     this.invoices().filter(
@@ -42,10 +47,12 @@ export class Invoices implements OnInit {
   );
 
   readonly totalValue = computed(() =>
-    this.invoices().reduce(
-      (total, invoice) => total + invoice.total,
-      0,
-    ),
+    this.invoices()
+      .filter((invoice) => invoice.status !== 'Cancelled')
+      .reduce(
+        (total, invoice) => total + invoice.total,
+        0,
+      ),
   );
 
   ngOnInit(): void {
@@ -118,6 +125,48 @@ export class Invoices implements OnInit {
           this.errorMessage.set(
             error.error?.message ??
               'Não foi possível imprimir a nota fiscal.',
+          ),
+      });
+  }
+
+  cancelInvoice(invoice: Invoice): void {
+    const confirmed = window.confirm(
+      `Deseja cancelar a nota #${invoice.number}? ` +
+        'Os produtos serão devolvidos ao estoque.',
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.errorMessage.set(null);
+    this.successMessage.set(null);
+    this.isCancelling.set(invoice.id);
+
+    this.billingService
+      .cancel(invoice.id)
+      .pipe(
+        finalize(() => this.isCancelling.set(null)),
+      )
+      .subscribe({
+        next: (cancelledInvoice) => {
+          this.invoices.update((invoices) =>
+            invoices.map((currentInvoice) =>
+              currentInvoice.id === cancelledInvoice.id
+                ? cancelledInvoice
+                : currentInvoice,
+            ),
+          );
+
+          this.successMessage.set(
+            `Nota #${cancelledInvoice.number} cancelada. ` +
+              'Os produtos foram devolvidos ao estoque.',
+          );
+        },
+        error: (error: HttpErrorResponse) =>
+          this.errorMessage.set(
+            error.error?.message ??
+              'Não foi possível cancelar a nota fiscal.',
           ),
       });
   }

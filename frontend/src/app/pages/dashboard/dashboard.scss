@@ -378,6 +378,11 @@ tbody tr:last-child td {
     color: #087443;
     background: #e6f8ed;
   }
+
+  &.cancelled {
+    color: #b42318;
+    background: #fff0ee;
+  }
 }
 
 .pending-issuer {

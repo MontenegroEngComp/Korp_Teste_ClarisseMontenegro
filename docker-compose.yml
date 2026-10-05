@@ -33,6 +33,40 @@ services:
       timeout: 5s
       retries: 5
 
+  stock-api:
+    build:
+      context: ./backend/src/Korp.Stock.Api
+      dockerfile: Dockerfile
+    container_name: korp-stock-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__StockDatabase: "Host=stock-db;Port=5432;Database=korp_stock;Username=korp_user;Password=korp_dev_password"
+    ports:
+      - "5001:8080"
+    depends_on:
+      stock-db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  billing-api:
+    build:
+      context: ./backend/src/Korp.Billing.Api
+      dockerfile: Dockerfile
+    container_name: korp-billing-api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__BillingDatabase: "Host=billing-db;Port=5432;Database=korp_billing;Username=korp_user;Password=korp_dev_password"
+      Services__StockApi: "http://stock-api:8080/"
+      Jwt__Key: ${JWT_KEY:?Defina JWT_KEY no arquivo .env (veja .env.example)}
+    ports:
+      - "5002:8080"
+    depends_on:
+      billing-db:
+        condition: service_healthy
+      stock-api:
+        condition: service_started
+    restart: unless-stopped
+
 volumes:
   stock-data:
   billing-data:

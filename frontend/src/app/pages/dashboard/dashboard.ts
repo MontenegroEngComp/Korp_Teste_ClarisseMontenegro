@@ -14,7 +14,10 @@ import {
   of,
 } from 'rxjs';
 
-import { Invoice } from '../../core/models/invoice';
+import {
+  Invoice,
+  INVOICE_STATUS_LABELS,
+} from '../../core/models/invoice';
 import { Product } from '../../core/models/product';
 import { Billing } from '../../core/services/billing';
 import { Stock } from '../../core/services/stock';
@@ -49,6 +52,7 @@ export class Dashboard implements OnInit {
   readonly stockHealthy = signal(true);
   readonly billingHealthy = signal(true);
   readonly errorMessage = signal<string | null>(null);
+  readonly statusLabels = INVOICE_STATUS_LABELS;
 
   readonly invoicesToday = computed(() => {
     const today = new Date();

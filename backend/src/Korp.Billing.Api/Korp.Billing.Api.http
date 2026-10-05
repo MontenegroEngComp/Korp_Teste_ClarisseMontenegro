@@ -43,3 +43,8 @@ Content-Type: application/json
 
 POST {{BillingApiUrl}}/api/invoices/{{InvoiceId}}/close
 Accept: application/json
+
+### Cancelar nota fiscal
+
+POST {{BillingApiUrl}}/api/invoices/{{InvoiceId}}/cancel
+Accept: application/json

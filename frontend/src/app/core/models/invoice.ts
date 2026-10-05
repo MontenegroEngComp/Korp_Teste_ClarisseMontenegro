@@ -1,4 +1,10 @@
-export type InvoiceStatus = 'Open' | 'Closed';
+export type InvoiceStatus = 'Open' | 'Closed' | 'Cancelled';
+
+export const INVOICE_STATUS_LABELS: Record<InvoiceStatus, string> = {
+  Open: 'Aberta',
+  Closed: 'Fechada',
+  Cancelled: 'Cancelada',
+};
 
 export interface InvoiceItem {
   id: string;

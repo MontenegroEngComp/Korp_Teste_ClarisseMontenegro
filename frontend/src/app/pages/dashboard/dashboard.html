@@ -240,12 +240,9 @@
                     class="status"
                     [class.open]="invoice.status === 'Open'"
                     [class.closed]="invoice.status === 'Closed'"
+                    [class.cancelled]="invoice.status === 'Cancelled'"
                   >
-                    {{
-                      invoice.status === 'Open'
-                        ? 'Aberta'
-                        : 'Fechada'
-                    }}
+                    {{ statusLabels[invoice.status] }}
                   </span>
                 </td>
 

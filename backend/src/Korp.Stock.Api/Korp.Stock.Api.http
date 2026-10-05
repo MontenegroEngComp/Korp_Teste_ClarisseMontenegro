@@ -44,3 +44,17 @@ Content-Type: application/json
 {
   "quantity": 0
 }
+
+### Aumentar estoque em lote
+
+POST {{StockApiUrl}}/api/stock/increase-batch
+Content-Type: application/json
+
+{
+  "items": [
+    {
+      "productId": "{{ProductId}}",
+      "quantity": 2
+    }
+  ]
+}
