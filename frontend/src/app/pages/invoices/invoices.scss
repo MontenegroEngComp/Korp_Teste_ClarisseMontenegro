@@ -5,8 +5,8 @@
 .page {
   min-height: 100%;
   padding: 36px 44px;
-  color: #10213c;
-  background: #f5f7fc;
+  color: var(--korp-text);
+  background: var(--korp-background);
 }
 
 .page-header {
@@ -17,6 +17,7 @@
   margin-bottom: 28px;
 
   h1 {
+    color: var(--korp-primary);
     margin: 5px 0 8px;
     font-size: 32px;
     line-height: 1.2;
@@ -24,13 +25,13 @@
 
   p {
     margin: 0;
-    color: #62708a;
+    color: var(--korp-text-muted);
     font-size: 16px;
   }
 }
 
 .eyebrow {
-  color: #3158dc;
+  color: var(--korp-accent);
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -57,14 +58,14 @@
 }
 
 .primary-button {
-  border: 1px solid #365bdc;
+  border: 1px solid var(--korp-accent);
   color: #ffffff;
-  background: #365bdc;
+  background: var(--korp-accent);
 }
 
 .secondary-button {
-  border: 1px solid #cad2e1;
-  color: #233653;
+  border: 1px solid var(--korp-border);
+  color: var(--korp-primary);
   background: #ffffff;
 
   &:disabled {
@@ -82,7 +83,7 @@
 
 .stat-card {
   padding: 24px;
-  border: 1px solid #dde3ed;
+  border: 1px solid var(--korp-border);
   border-radius: 16px;
   background: #ffffff;
   box-shadow: 0 8px 24px rgb(25 45 80 / 5%);
@@ -90,7 +91,7 @@
   span {
     display: block;
     margin-bottom: 10px;
-    color: #66738b;
+    color: var(--korp-text-muted);
     font-size: 14px;
   }
 
@@ -112,7 +113,7 @@
 
 .content-card {
   overflow: hidden;
-  border: 1px solid #dde3ed;
+  border: 1px solid var(--korp-border);
   border-radius: 18px;
   background: #ffffff;
   box-shadow: 0 8px 24px rgb(25 45 80 / 5%);
@@ -123,9 +124,10 @@
   align-items: center;
   justify-content: space-between;
   padding: 28px 30px;
-  border-bottom: 1px solid #e1e6ef;
+  border-bottom: 1px solid var(--korp-border);
 
   h2 {
+    color: var(--korp-primary);
     margin: 6px 0 0;
     font-size: 22px;
   }
@@ -135,8 +137,8 @@
   min-width: 42px;
   padding: 10px;
   border-radius: 12px;
-  color: #3158dc;
-  background: #edf1ff;
+  color: var(--korp-accent);
+  background: var(--korp-accent-soft);
   font-weight: 800;
   text-align: center;
 }
@@ -153,13 +155,13 @@ table {
 th,
 td {
   padding: 18px 24px;
-  border-bottom: 1px solid #e4e8f0;
+  border-bottom: 1px solid var(--korp-border);
   text-align: left;
   white-space: nowrap;
 }
 
 th {
-  color: #657188;
+  color: var(--korp-text-muted);
   background: #fafbfc;
   font-size: 13px;
   text-transform: uppercase;
@@ -174,7 +176,7 @@ tbody tr:hover {
 }
 
 .invoice-number {
-  color: #3158dc;
+  color: var(--korp-primary);
   font-weight: 800;
 }
 
@@ -207,7 +209,7 @@ tbody tr:hover {
 
 .state-message {
   padding: 60px 24px;
-  color: #68758d;
+  color: var(--korp-text-muted);
   text-align: center;
 }
 
@@ -255,14 +257,14 @@ tbody tr:hover {
   border: 0;
   border-radius: 8px;
   color: #ffffff;
-  background: #365bdc;
+  background: var(--korp-accent);
   font: inherit;
   font-weight: 700;
   white-space: nowrap;
   cursor: pointer;
 
   &:hover:not(:disabled) {
-    background: #284bc4;
+    background: var(--korp-accent-dark);
   }
 
   &:disabled {
@@ -280,14 +282,14 @@ tbody tr:hover {
   border: 0;
   border-radius: 8px;
   color: #ffffff;
-  background: #365bdc;
+  background: var(--korp-accent);
   font: inherit;
   font-weight: 700;
   white-space: nowrap;
   cursor: pointer;
 
   &:hover:not(:disabled) {
-    background: #284bc4;
+    background: var(--korp-accent-dark);
   }
 
   &:disabled {

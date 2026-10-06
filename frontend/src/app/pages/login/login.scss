@@ -6,7 +6,7 @@
   display: grid;
   grid-template-columns: minmax(320px, 0.9fr) minmax(440px, 1.1fr);
   min-height: 100vh;
-  background: #f4f7fd;
+  background: var(--korp-background);
 }
 
 .brand-panel {
@@ -16,7 +16,7 @@
   flex-direction: column;
   overflow: hidden;
   position: relative;
-  background: #0d1b33;
+  background: var(--korp-primary);
   color: white;
 
   &::after {
@@ -27,7 +27,7 @@
     right: -180px;
     bottom: -180px;
     content: '';
-    background: rgb(65 105 225 / 18%);
+    background: rgb(140 178 202 / 12%);
   }
 }
 
@@ -49,7 +49,7 @@
 
   small {
     margin-top: 3px;
-    color: #a9b9d6;
+    color: var(--korp-light-blue);
     font-size: 0.72rem;
     letter-spacing: 0.08em;
   }
@@ -61,7 +61,7 @@
   height: 52px;
   place-items: center;
   border-radius: 15px;
-  background: #3d5fe3;
+  background: var(--korp-accent);
   font-size: 1.35rem;
   font-weight: 800;
 }
@@ -81,14 +81,30 @@
   p {
     max-width: 470px;
     margin: 0;
-    color: #b6c4dc;
+    color: rgb(255 255 255 / 78%);
     font-size: 1.05rem;
     line-height: 1.7;
+  }
+
+  // Texto claro para contraste sobre o azul-petróleo; o rosa fica no marcador.
+  .eyebrow {
+    color: #BFD5E2;
+
+    &::before {
+      display: inline-block;
+      width: 24px;
+      height: 2px;
+      margin-right: 10px;
+      border-radius: 2px;
+      content: '';
+      vertical-align: middle;
+      background: var(--korp-accent);
+    }
   }
 }
 
 .eyebrow {
-  color: #6685ff;
+  color: var(--korp-accent);
   font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 0.1em;
@@ -104,10 +120,10 @@
 .login-card {
   width: min(100%, 470px);
   padding: 42px;
-  border: 1px solid #dce3ef;
+  border: 1px solid var(--korp-border);
   border-radius: 20px;
   background: white;
-  box-shadow: 0 18px 50px rgb(15 31 57 / 8%);
+  box-shadow: 0 18px 50px rgb(43 72 90 / 8%);
 }
 
 .login-header {
@@ -115,13 +131,13 @@
 
   h2 {
     margin: 9px 0 10px;
-    color: #0b1f3a;
+    color: var(--korp-primary);
     font-size: 1.8rem;
   }
 
   p {
     margin: 0;
-    color: #66758f;
+    color: var(--korp-text-muted);
     line-height: 1.6;
   }
 }
@@ -137,7 +153,7 @@ form {
 
 label {
   gap: 8px;
-  color: #13233d;
+  color: var(--korp-primary);
   font-size: 0.9rem;
   font-weight: 700;
 
@@ -152,17 +168,17 @@ input {
   width: 100%;
   min-width: 0;
   padding: 13px 14px;
-  border: 1px solid #ccd5e3;
+  border: 1px solid var(--korp-border);
   border-radius: 10px;
   outline: none;
   background: white;
-  color: #0b1f3a;
+  color: var(--korp-text);
   font: inherit;
   font-weight: 500;
 
   &:focus {
-    border-color: #3d5fe3;
-    box-shadow: 0 0 0 4px rgb(61 95 227 / 12%);
+    border-color: var(--korp-accent);
+    box-shadow: 0 0 0 4px var(--korp-accent-ring);
   }
 }
 
@@ -171,13 +187,13 @@ button {
   border: 0;
   border-radius: 10px;
   cursor: pointer;
-  background: #3d5fe3;
+  background: var(--korp-accent);
   color: white;
   font-size: 0.95rem;
   font-weight: 800;
 
   &:hover:not(:disabled) {
-    background: #2f4fc8;
+    background: var(--korp-accent-dark);
   }
 
   &:disabled {
@@ -201,7 +217,7 @@ button {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  color: #718096;
+  color: var(--korp-text-muted);
   font-size: 0.78rem;
 
   span {

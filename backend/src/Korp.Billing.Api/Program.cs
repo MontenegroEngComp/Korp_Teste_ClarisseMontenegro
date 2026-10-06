@@ -54,6 +54,7 @@ builder.Services.AddHttpClient<StockApiClient>(client =>
 
 builder.Services.AddSingleton<PasswordService>();
 builder.Services.AddSingleton<JwtTokenService>();
+builder.Services.AddScoped<AdminBootstrapper>();
 
 var jwtKey = builder.Configuration["Jwt:Key"]
     ?? throw new InvalidOperationException(
@@ -91,6 +92,26 @@ builder.Services
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
+
+// Desabilitados por padrão; o docker-compose.yml habilita para que uma
+// instalação nova já tenha o banco criado e um administrador inicial.
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    if (app.Configuration.GetValue<bool>("Database:ApplyMigrations"))
+    {
+        await scope.ServiceProvider
+            .GetRequiredService<BillingDbContext>()
+            .Database
+            .MigrateAsync();
+    }
+
+    if (app.Configuration.GetValue<bool>("BootstrapAdmin:Enabled"))
+    {
+        await scope.ServiceProvider
+            .GetRequiredService<AdminBootstrapper>()
+            .RunAsync();
+    }
+}
 
 if (app.Environment.IsDevelopment())
 {

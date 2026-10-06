@@ -20,18 +20,18 @@
 
   h1 {
     margin: 0.4rem 0 0.5rem;
-    color: #071f45;
+    color: var(--korp-primary);
     font-size: clamp(2rem, 3vw, 2.6rem);
   }
 
   p {
     margin: 0;
-    color: #66748c;
+    color: var(--korp-text-muted);
   }
 }
 
 .eyebrow {
-  color: #315be8;
+  color: var(--korp-accent);
   font-size: 0.8rem;
   font-weight: 800;
   letter-spacing: 0.12em;
@@ -60,16 +60,16 @@ button {
 
 .primary-button {
   color: #ffffff;
-  background: #315be8;
+  background: var(--korp-accent);
 
   &:hover:not(:disabled) {
-    background: #244bcf;
+    background: var(--korp-accent-dark);
   }
 }
 
 .secondary-button {
-  color: #18345b;
-  border: 1px solid #ccd6e5;
+  color: var(--korp-primary);
+  border: 1px solid var(--korp-border);
   background: #ffffff;
 
   &:hover:not(:disabled) {
@@ -80,7 +80,7 @@ button {
 .period-card,
 .summary-card,
 .content-card {
-  border: 1px solid #dce4ef;
+  border: 1px solid var(--korp-border);
   border-radius: 1.25rem;
   background: #ffffff;
   box-shadow: 0 0.5rem 1.5rem rgb(25 50 90 / 5%);
@@ -100,7 +100,7 @@ button {
   }
 
   label {
-    color: #142746;
+    color: var(--korp-text);
     font-size: 0.9rem;
     font-weight: 700;
   }
@@ -109,12 +109,12 @@ button {
     text-align: right;
 
     span {
-      color: #7b8799;
+      color: var(--korp-text-muted);
       font-size: 0.8rem;
     }
 
     strong {
-      color: #071f45;
+      color: var(--korp-primary);
     }
   }
 }
@@ -123,16 +123,16 @@ input {
   min-width: 14rem;
   min-height: 3rem;
   padding: 0 0.9rem;
-  border: 1px solid #ccd6e5;
+  border: 1px solid var(--korp-border);
   border-radius: 0.7rem;
   outline: none;
-  color: #071f45;
+  color: var(--korp-text);
   background: #ffffff;
   font: inherit;
 
   &:focus {
-    border-color: #315be8;
-    box-shadow: 0 0 0 3px rgb(49 91 232 / 12%);
+    border-color: var(--korp-accent);
+    box-shadow: 0 0 0 3px var(--korp-accent-ring);
   }
 }
 
@@ -163,19 +163,19 @@ input {
   padding: 1.35rem 1.5rem;
 
   span {
-    color: #66748c;
+    color: var(--korp-text-muted);
     font-size: 0.9rem;
   }
 
   strong {
-    color: #071f45;
+    color: var(--korp-primary);
     font-size: 1.8rem;
   }
 }
 
 .value-card {
   strong {
-    color: #315be8;
+    color: var(--korp-primary);
   }
 }
 
@@ -189,11 +189,11 @@ input {
   justify-content: space-between;
   gap: 1rem;
   padding: 1.5rem;
-  border-bottom: 1px solid #e4e9f1;
+  border-bottom: 1px solid var(--korp-border);
 
   h2 {
     margin: 0.35rem 0 0;
-    color: #071f45;
+    color: var(--korp-primary);
     font-size: 1.35rem;
   }
 }
@@ -204,14 +204,14 @@ input {
   height: 3rem;
   place-items: center;
   border-radius: 0.85rem;
-  color: #315be8;
-  background: #edf2ff;
+  color: var(--korp-accent);
+  background: var(--korp-accent-soft);
   font-weight: 800;
 }
 
 .state-message {
   padding: 3rem 1.5rem;
-  color: #66748c;
+  color: var(--korp-text-muted);
   text-align: center;
 }
 
@@ -227,13 +227,13 @@ table {
 th,
 td {
   padding: 1rem 1.25rem;
-  border-bottom: 1px solid #e4e9f1;
+  border-bottom: 1px solid var(--korp-border);
   text-align: left;
   white-space: nowrap;
 }
 
 th {
-  color: #66748c;
+  color: var(--korp-text-muted);
   background: #f8fafc;
   font-size: 0.75rem;
   letter-spacing: 0.04em;
@@ -241,7 +241,7 @@ th {
 }
 
 td {
-  color: #142746;
+  color: var(--korp-text);
   font-size: 0.9rem;
 }
 
@@ -251,7 +251,7 @@ tbody tr:last-child td {
 
 .invoice-number,
 .invoice-value {
-  color: #071f45;
+  color: var(--korp-primary);
   font-weight: 800;
 }
 
@@ -283,8 +283,8 @@ tbody tr:last-child td {
   justify-content: space-between;
   gap: 1rem;
   padding: 1rem 1.5rem;
-  border-top: 1px solid #e4e9f1;
-  color: #7b8799;
+  border-top: 1px solid var(--korp-border);
+  color: var(--korp-text-muted);
   font-size: 0.8rem;
 }
 
