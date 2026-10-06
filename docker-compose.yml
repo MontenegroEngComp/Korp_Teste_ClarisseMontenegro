@@ -11,7 +11,7 @@ services:
     volumes:
       - stock-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U korp_user -d korp_stock"]
+      test: ["CMD-SHELL", "pg_isready -h localhost -U korp_user -d korp_stock"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -28,7 +28,7 @@ services:
     volumes:
       - billing-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U korp_user -d korp_billing"]
+      test: ["CMD-SHELL", "pg_isready -h localhost -U korp_user -d korp_billing"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -41,6 +41,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ConnectionStrings__StockDatabase: "Host=stock-db;Port=5432;Database=korp_stock;Username=korp_user;Password=korp_dev_password"
+      Database__ApplyMigrations: "true"
     ports:
       - "5001:8080"
     depends_on:
@@ -58,6 +59,14 @@ services:
       ConnectionStrings__BillingDatabase: "Host=billing-db;Port=5432;Database=korp_billing;Username=korp_user;Password=korp_dev_password"
       Services__StockApi: "http://stock-api:8080/"
       Jwt__Key: ${JWT_KEY:?Defina JWT_KEY no arquivo .env (veja .env.example)}
+      Database__ApplyMigrations: "true"
+      # Usado apenas se ainda não existir nenhum administrador no banco.
+      BootstrapAdmin__Enabled: "true"
+      BootstrapAdmin__Name: ${BOOTSTRAP_ADMIN_NAME:-}
+      BootstrapAdmin__Email: ${BOOTSTRAP_ADMIN_EMAIL:-}
+      BootstrapAdmin__Cpf: ${BOOTSTRAP_ADMIN_CPF:-}
+      BootstrapAdmin__Phone: ${BOOTSTRAP_ADMIN_PHONE:-}
+      BootstrapAdmin__Password: ${BOOTSTRAP_ADMIN_PASSWORD:-}
     ports:
       - "5002:8080"
     depends_on:

@@ -19,19 +19,19 @@
 
   h1 {
     margin: 0.4rem 0 0.5rem;
-    color: #071f45;
+    color: var(--korp-primary);
     font-size: clamp(2rem, 3vw, 2.6rem);
   }
 
   p {
     margin: 0;
-    color: #66748c;
+    color: var(--korp-text-muted);
     font-size: 1rem;
   }
 }
 
 .eyebrow {
-  color: #315be8;
+  color: var(--korp-accent);
   font-size: 0.8rem;
   font-weight: 800;
   letter-spacing: 0.12em;
@@ -46,7 +46,7 @@
 
 .summary-card,
 .content-card {
-  border: 1px solid #dce4ef;
+  border: 1px solid var(--korp-border);
   border-radius: 1.25rem;
   background: #ffffff;
   box-shadow: 0 0.5rem 1.5rem rgb(25 50 90 / 5%);
@@ -58,11 +58,11 @@
   padding: 1.4rem 1.6rem;
 
   span {
-    color: #66748c;
+    color: var(--korp-text-muted);
   }
 
   strong {
-    color: #071f45;
+    color: var(--korp-primary);
     font-size: 2rem;
   }
 }
@@ -102,11 +102,11 @@
   justify-content: space-between;
   gap: 1rem;
   padding: 1.5rem;
-  border-bottom: 1px solid #e4e9f1;
+  border-bottom: 1px solid var(--korp-border);
 
   h2 {
     margin: 0.35rem 0 0;
-    color: #071f45;
+    color: var(--korp-primary);
     font-size: 1.35rem;
   }
 }
@@ -117,8 +117,8 @@
   height: 3rem;
   place-items: center;
   border-radius: 0.85rem;
-  color: #315be8;
-  background: #edf2ff;
+  color: var(--korp-accent);
+  background: var(--korp-accent-soft);
   font-weight: 800;
 }
 
@@ -137,7 +137,7 @@ form {
 label {
   display: grid;
   gap: 0.5rem;
-  color: #142746;
+  color: var(--korp-text);
   font-size: 0.9rem;
   font-weight: 700;
 }
@@ -147,17 +147,17 @@ select {
   width: 100%;
   min-height: 3rem;
   padding: 0 0.9rem;
-  border: 1px solid #ccd6e5;
+  border: 1px solid var(--korp-border);
   border-radius: 0.7rem;
   outline: none;
-  color: #071f45;
+  color: var(--korp-text);
   background: #ffffff;
   font: inherit;
   box-sizing: border-box;
 
   &:focus {
-    border-color: #315be8;
-    box-shadow: 0 0 0 3px rgb(49 91 232 / 12%);
+    border-color: var(--korp-accent);
+    box-shadow: 0 0 0 3px var(--korp-accent-ring);
   }
 }
 
@@ -184,16 +184,16 @@ button {
 
 .primary-button {
   color: #ffffff;
-  background: #315be8;
+  background: var(--korp-accent);
 
   &:hover:not(:disabled) {
-    background: #244bcf;
+    background: var(--korp-accent-dark);
   }
 }
 
 .secondary-button {
-  color: #18345b;
-  border: 1px solid #ccd6e5;
+  color: var(--korp-primary);
+  border: 1px solid var(--korp-border);
   background: #ffffff;
 
   &:hover:not(:disabled) {
@@ -203,7 +203,7 @@ button {
 
 .state-message {
   padding: 3rem 1.5rem;
-  color: #66748c;
+  color: var(--korp-text-muted);
   text-align: center;
 }
 
@@ -215,7 +215,7 @@ button {
   display: grid;
   gap: 1rem;
   padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid #e4e9f1;
+  border-bottom: 1px solid var(--korp-border);
 
   &:last-child {
     border-bottom: 0;
@@ -240,7 +240,7 @@ button {
   place-items: center;
   border-radius: 50%;
   color: #ffffff;
-  background: #315be8;
+  background: var(--korp-primary);
   font-size: 0.8rem;
   font-weight: 800;
 }
@@ -250,13 +250,13 @@ button {
   align-items: center;
   flex-wrap: wrap;
   gap: 0.65rem;
-  color: #071f45;
+  color: var(--korp-primary);
 }
 
 .employee-email {
   display: block;
   margin-top: 0.2rem;
-  color: #66748c;
+  color: var(--korp-text-muted);
   font-size: 0.85rem;
 }
 
@@ -281,7 +281,7 @@ button {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.8rem;
-  color: #142746;
+  color: var(--korp-text);
   font-size: 0.85rem;
 
   span {
@@ -290,7 +290,7 @@ button {
   }
 
   small {
-    color: #7b8799;
+    color: var(--korp-text-muted);
   }
 }
 

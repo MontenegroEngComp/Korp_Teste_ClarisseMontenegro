@@ -31,6 +31,18 @@ builder.Services.AddDbContext<StockDbContext>(options =>
 
 var app = builder.Build();
 
+// Desabilitado por padrão; o docker-compose.yml habilita para que uma
+// instalação nova já tenha o banco criado.
+if (app.Configuration.GetValue<bool>("Database:ApplyMigrations"))
+{
+    await using var scope = app.Services.CreateAsyncScope();
+
+    await scope.ServiceProvider
+        .GetRequiredService<StockDbContext>()
+        .Database
+        .MigrateAsync();
+}
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();

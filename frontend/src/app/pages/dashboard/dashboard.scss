@@ -5,8 +5,8 @@
 .dashboard {
   min-height: 100%;
   padding: 34px 38px 44px;
-  color: #10213c;
-  background: #f5f7fc;
+  color: var(--korp-text);
+  background: var(--korp-background);
 }
 
 .dashboard-header {
@@ -17,18 +17,19 @@
   margin-bottom: 28px;
 
   h1 {
+    color: var(--korp-primary);
     margin: 5px 0 8px;
     font-size: 34px;
   }
 
   p {
     margin: 0;
-    color: #65728a;
+    color: var(--korp-text-muted);
   }
 }
 
 .eyebrow {
-  color: #3158dc;
+  color: var(--korp-accent);
   font-size: 11px;
   font-weight: 900;
   letter-spacing: 0.12em;
@@ -45,7 +46,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #59667d;
+  color: var(--korp-text-muted);
   font-size: 12px;
   font-weight: 700;
 }
@@ -66,7 +67,7 @@
   justify-content: center;
   border-radius: 10px;
   color: #ffffff;
-  background: #365bdc;
+  background: var(--korp-accent);
   font-weight: 800;
   text-decoration: none;
 }
@@ -88,7 +89,7 @@
 
 .metric-card {
   padding: 22px;
-  border: 1px solid #dfe4ed;
+  border: 1px solid var(--korp-border);
   border-radius: 16px;
   background: #ffffff;
   box-shadow: 0 8px 24px rgb(25 45 80 / 5%);
@@ -100,7 +101,7 @@
   }
 
   > small {
-    color: #77839a;
+    color: var(--korp-text-muted);
     font-size: 11px;
   }
 }
@@ -109,7 +110,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: #60708a;
+  color: var(--korp-text-muted);
   font-size: 13px;
 }
 
@@ -119,8 +120,8 @@
   height: 32px;
   place-items: center;
   border-radius: 10px;
-  color: #3158dc;
-  background: #edf1ff;
+  color: var(--korp-primary);
+  background: var(--korp-light-blue-soft);
   font-size: 11px;
   font-weight: 900;
 }
@@ -139,7 +140,7 @@
 
 .panel {
   overflow: hidden;
-  border: 1px solid #dfe4ed;
+  border: 1px solid var(--korp-border);
   border-radius: 17px;
   background: #ffffff;
   box-shadow: 0 8px 24px rgb(25 45 80 / 5%);
@@ -153,12 +154,13 @@
   gap: 20px;
 
   h2 {
+    color: var(--korp-primary);
     margin: 5px 0 0;
     font-size: 20px;
   }
 
   a {
-    color: #3158dc;
+    color: var(--korp-accent);
     font-size: 12px;
     font-weight: 800;
     text-decoration: none;
@@ -166,7 +168,7 @@
 }
 
 .period {
-  color: #78849a;
+  color: var(--korp-text-muted);
   font-size: 11px;
 }
 
@@ -177,7 +179,7 @@
   align-items: stretch;
   justify-content: space-between;
   gap: 12px;
-  border-top: 1px solid #e7eaf0;
+  border-top: 1px solid var(--korp-border);
   background:
     repeating-linear-gradient(
       to bottom,
@@ -209,7 +211,7 @@
   left: 0;
   min-height: 8px;
   border-radius: 8px 8px 3px 3px;
-  background: linear-gradient(#6d88ed, #365bdc);
+  background: linear-gradient(var(--korp-light-blue), var(--korp-primary));
 }
 
 .bar-value {
@@ -217,7 +219,7 @@
   left: 50%;
   z-index: 1;
   margin-bottom: 7px;
-  color: #53617a;
+  color: var(--korp-text-muted);
   font-size: 10px;
   font-weight: 800;
   transform: translateX(-50%);
@@ -225,7 +227,7 @@
 
 .chart-label {
   margin-top: 10px;
-  color: #77839a;
+  color: var(--korp-text-muted);
   font-size: 10px;
   text-transform: capitalize;
 }
@@ -236,12 +238,12 @@
 
 .panel-description {
   margin: -10px 25px 14px;
-  color: #79859a;
+  color: var(--korp-text-muted);
   font-size: 12px;
 }
 
 .stock-list {
-  border-top: 1px solid #e7eaf0;
+  border-top: 1px solid var(--korp-border);
 }
 
 .stock-item {
@@ -282,8 +284,8 @@
   flex: 0 0 34px;
   place-items: center;
   border-radius: 10px;
-  color: #3158dc;
-  background: #edf1ff;
+  color: var(--korp-primary);
+  background: var(--korp-light-blue-soft);
   font-size: 11px;
   font-weight: 900;
 }
@@ -301,9 +303,9 @@
   display: block;
   margin: 18px 24px 22px;
   padding: 12px;
-  border: 1px solid #cfd7e7;
+  border: 1px solid var(--korp-border);
   border-radius: 9px;
-  color: #263750;
+  color: var(--korp-primary);
   font-size: 12px;
   font-weight: 800;
   text-align: center;
@@ -312,7 +314,7 @@
 
 .empty-state {
   padding: 36px 24px;
-  color: #7a879c;
+  color: var(--korp-text-muted);
   text-align: center;
 }
 
@@ -325,7 +327,7 @@
 
 .table-wrapper {
   overflow-x: auto;
-  border-top: 1px solid #e7eaf0;
+  border-top: 1px solid var(--korp-border);
 }
 
 table {
@@ -336,13 +338,13 @@ table {
 th,
 td {
   padding: 16px 22px;
-  border-bottom: 1px solid #e8ebf1;
+  border-bottom: 1px solid var(--korp-border);
   text-align: left;
   white-space: nowrap;
 }
 
 th {
-  color: #6f7b91;
+  color: var(--korp-text-muted);
   background: #fafbfc;
   font-size: 10px;
   letter-spacing: 0.04em;
@@ -358,7 +360,7 @@ tbody tr:last-child td {
 }
 
 .invoice-number {
-  color: #3158dc;
+  color: var(--korp-primary);
   font-weight: 900;
 }
 
