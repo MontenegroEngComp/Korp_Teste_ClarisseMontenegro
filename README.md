@@ -1,8 +1,61 @@
 # Korp Nexus
 
+<p align="center">
+  <strong>Sistema full stack de estoque e faturamento desenvolvido com Angular, ASP.NET Core e PostgreSQL.</strong>
+</p>
+
+<p align="center">
+  <img alt="Status: projeto concluído" src="https://img.shields.io/badge/status-conclu%C3%ADdo-FF0C46?style=flat-square&labelColor=2B485A">
+  <img alt="Angular 22" src="https://img.shields.io/badge/Angular-22-FF0C46?style=flat-square&logo=angular&logoColor=white&labelColor=2B485A">
+  <img alt=".NET 10" src="https://img.shields.io/badge/.NET-10-FF0C46?style=flat-square&logo=dotnet&logoColor=white&labelColor=2B485A">
+  <img alt="PostgreSQL 17" src="https://img.shields.io/badge/PostgreSQL-17-FF0C46?style=flat-square&logo=postgresql&logoColor=white&labelColor=2B485A">
+  <img alt="Docker" src="https://img.shields.io/badge/Docker-Compose-FF0C46?style=flat-square&logo=docker&logoColor=white&labelColor=2B485A">
+  <a href="https://github.com/MontenegroEngComp/Korp_Teste_ClarisseMontenegro/actions/workflows/ci.yml"><img alt="Status do workflow de CI no GitHub Actions" src="https://img.shields.io/github/actions/workflow/status/MontenegroEngComp/Korp_Teste_ClarisseMontenegro/ci.yml?branch=main&style=flat-square&logo=githubactions&logoColor=white&label=CI&labelColor=2B485A"></a>
+</p>
+
+<p align="center">
+  <a href="#demonstração-visual">Demonstração visual</a> •
+  <a href="#funcionalidades">Funcionalidades</a> •
+  <a href="#arquitetura">Arquitetura</a> •
+  <a href="#tecnologias">Tecnologias</a> •
+  <a href="#estrutura-de-pastas">Estrutura de pastas</a> •
+  <a href="#pré-requisitos">Pré-requisitos</a> •
+  <a href="#configuração">Configuração</a> •
+  <a href="#execução">Execução</a> •
+  <a href="#build">Build</a> •
+  <a href="#integração-contínua">Integração contínua</a> •
+  <a href="#segurança">Segurança</a> •
+  <a href="#decisões-técnicas">Decisões técnicas</a> •
+  <a href="#validações-realizadas">Validações realizadas</a> •
+  <a href="#autora">Autora</a>
+</p>
+
+---
+
 Sistema de emissão de notas fiscais com controle de estoque, desenvolvido para o teste técnico da Korp.
 
 A aplicação é composta por um front-end em Angular e dois microsserviços em ASP.NET Core, cada um com seu próprio banco PostgreSQL: o **serviço de estoque** (produtos e saldos) e o **serviço de faturamento** (notas fiscais, funcionários e autenticação).
+
+## Demonstração visual
+
+<p align="center">
+  <img src="docs/images/dashboard.png" width="100%" alt="Dashboard do Korp Nexus com saudação ao funcionário, notas emitidas no dia, produtos com estoque baixo, notas recentes e fluxo de emissão dos últimos 7 dias">
+</p>
+
+<p align="center">
+  <img src="docs/images/login.png" width="49%" alt="Tela de login com campos de e-mail e senha">
+  <img src="docs/images/produtos.png" width="49%" alt="Tela de produtos com cadastro e listagem de produtos com saldo atual">
+</p>
+
+<p align="center">
+  <img src="docs/images/notas-fiscais.png" width="49%" alt="Listagem de notas fiscais com status, itens e valor total">
+  <img src="docs/images/nova-nota.png" width="49%" alt="Formulário de emissão de nova nota fiscal com seleção de produtos e quantidades">
+</p>
+
+<p align="center">
+  <img src="docs/images/relatorio-mensal.png" width="49%" alt="Relatório mensal com seleção do mês, totais de notas e opções de exportação em CSV e impressão">
+  <img src="docs/images/funcionarios.png" width="49%" alt="Tela de gestão de funcionários com cadastro, perfis e status de ativação">
+</p>
 
 ## Funcionalidades
 
