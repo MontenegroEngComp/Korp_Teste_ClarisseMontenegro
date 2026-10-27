@@ -39,6 +39,14 @@ A aplicação é composta por um front-end em Angular e dois microsserviços em 
 ## Demonstração visual
 
 <p align="center">
+  <img src="docs/images/demonstracao.gif" width="100%" alt="Demonstração do fluxo completo: login, dashboard, consulta de estoque, emissão de nota fiscal com dois produtos, impressão e fechamento da nota e baixa automática no estoque">
+</p>
+
+<p align="center">
+  <em>Fluxo completo: login → emissão de nota com dois produtos → impressão e fechamento → baixa automática no estoque (Teclado 38 → 33, Mouse 33 → 30).</em>
+</p>
+
+<p align="center">
   <img src="docs/images/dashboard.png" width="100%" alt="Dashboard do Korp Nexus com saudação ao funcionário, notas emitidas no dia, produtos com estoque baixo, notas recentes e fluxo de emissão dos últimos 7 dias">
 </p>
 
